@@ -1,0 +1,23 @@
+{
+  "video1_zvl_rev_rate": {
+    "title": "ZVL Bowling - Find Your Rev Rate (LaneTrax Major Update)",
+    "frames_extracted": 187,
+    "frames_dir": "D:\\Projects\\BowlerTrax\\Analysis\\frames\\video1_zvl_rev_rate",
+    "transcript_length": 6740,
+    "segments_count": 107
+  },
+  "video2_joshua_review": {
+    "title": "Joshua Tajiri - LaneTrax App Review, Setup & Features",
+    "frames_extracted": 418,
+    "frames_dir": "D:\\Projects\\BowlerTrax\\Analysis\\frames\\video2_joshua_review",
+    "transcript_length": 12027,
+    "segments_count": 313
+  },
+  "video3_zvl_specto": {
+    "title": "ZVL Bowling - Specto as an App (LaneTrax)",
+    "frames_extracted": 206,
+    "frames_dir": "D:\\Projects\\BowlerTrax\\Analysis\\frames\\video3_zvl_specto",
+    "transcript_length": 7629,
+    "segments_count": 80
+  }
+}

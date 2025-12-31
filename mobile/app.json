@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "BowlerTrax",
+    "slug": "bowlertrax",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "scheme": "bowlertrax",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1a1a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bowlertrax.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "BowlerTrax uses the camera to track your bowling shots and calculate metrics like speed, rev rate, and entry angle.",
+        "NSMicrophoneUsageDescription": "BowlerTrax may use the microphone for video recording.",
+        "NSPhotoLibraryUsageDescription": "BowlerTrax saves shot videos and thumbnails to your photo library."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1a1a1a"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.bowlertrax.app",
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "BowlerTrax uses the camera to track your bowling shots."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "BowlerTrax saves shot videos to your library.",
+          "savePhotosPermission": "BowlerTrax saves shot videos to your library.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      "expo-sqlite",
+      "expo-secure-store"
+    ]
+  }
+}
