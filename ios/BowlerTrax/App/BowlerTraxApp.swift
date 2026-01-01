@@ -23,7 +23,8 @@ struct BowlerTraxApp: App {
             ShotEntity.self,
             BallProfileEntity.self,
             CalibrationEntity.self,
-            CenterEntity.self
+            CenterEntity.self,
+            OilPatternEntity.self
         ])
 
         // Configure the model container
