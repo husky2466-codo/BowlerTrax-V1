@@ -161,11 +161,11 @@ class CameraPreviewUIView: UIView {
             case .portraitUpsideDown:
                 return 270
             case .landscapeLeft:
-                // Interface landscapeLeft = home button on right = camera rotation 0
-                return 0
-            case .landscapeRight:
-                // Interface landscapeRight = home button on left = camera rotation 180
+                // Interface landscapeLeft = home button on right = camera rotation 180
                 return 180
+            case .landscapeRight:
+                // Interface landscapeRight = home button on left = camera rotation 0
+                return 0
             default:
                 break
             }
@@ -180,20 +180,29 @@ class CameraPreviewUIView: UIView {
             case .portraitUpsideDown:
                 return 270
             case .landscapeLeft:
-                // Device landscapeLeft (home button on right) = camera rotation 0
-                return 0
-            case .landscapeRight:
-                // Device landscapeRight (home button on left) = camera rotation 180
+                // Device landscapeLeft (home button on right) = camera rotation 180
                 return 180
+            case .landscapeRight:
+                // Device landscapeRight (home button on left) = camera rotation 0
+                return 0
             default:
                 break
             }
         }
 
-        // Default to landscape right (most common for bowling app usage)
-        // This matches the preview orientation where the device is held in landscape
-        // with the home button/indicator on the right side
-        return 0
+        // Default to landscape (180 degrees for typical iPad landscape orientation)
+        // BowlerTrax is landscape-locked, so this is the most common case
+        return 180
+    }
+
+    // MARK: - Window Attachment
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        // Update orientation when view is added to window (window scene now available)
+        if window != nil, let layer = previewLayer {
+            updateOrientation(for: layer)
+        }
     }
 
     // MARK: - Cleanup
