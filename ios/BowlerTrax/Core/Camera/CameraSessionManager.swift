@@ -722,11 +722,14 @@ final class CameraSessionManager: NSObject, ObservableObject {
 
     /// Get the current video rotation angle based on device orientation (iOS 17+ API)
     /// Returns rotation angle in degrees for use with connection.videoRotationAngle
-    /// Uses a default value of portrait (90 degrees) as a fallback when called from nonisolated context
+    /// Uses a default value of landscape (0 degrees) as a fallback when called from nonisolated context.
+    /// This is appropriate for BowlerTrax which is designed for landscape use.
     private nonisolated func currentVideoRotationAngle() -> CGFloat {
-        // Default to portrait orientation when called from nonisolated context
-        // The actual orientation will be updated when updatePreviewLayer is called from main actor
-        return 90
+        // Default to landscape orientation when called from nonisolated context.
+        // BowlerTrax is designed for landscape use, so 0 degrees (landscapeLeft interface orientation)
+        // is the appropriate default. The actual orientation will be updated dynamically
+        // by CameraPreviewUIView when the view is attached to a window.
+        return 0
     }
 }
 

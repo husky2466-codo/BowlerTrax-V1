@@ -131,45 +131,69 @@ class CameraPreviewUIView: UIView {
 
     @objc private func orientationDidChange(_ notification: Notification) {
         guard let layer = previewLayer else { return }
-
-        let deviceOrientation = UIDevice.current.orientation
-
-        // Only update for valid orientations (ignore faceUp, faceDown, unknown)
-        guard deviceOrientation.isValidInterfaceOrientation else { return }
-        guard deviceOrientation != currentOrientation else { return }
-
-        currentOrientation = deviceOrientation
         updateOrientation(for: layer)
     }
 
     private func updateOrientation(for layer: AVCaptureVideoPreviewLayer) {
         guard let connection = layer.connection else { return }
 
-        let deviceOrientation = UIDevice.current.orientation
-
-        // Map device orientation to video rotation angle (iOS 17+ API)
-        // Note: landscapeLeft/Right are inverted between UIDeviceOrientation and video rotation
-        let rotationAngle: CGFloat
-        switch deviceOrientation {
-        case .portrait:
-            rotationAngle = 90
-        case .portraitUpsideDown:
-            rotationAngle = 270
-        case .landscapeLeft:
-            // Device rotated left = camera should be landscape right
-            rotationAngle = 180
-        case .landscapeRight:
-            // Device rotated right = camera should be landscape left
-            rotationAngle = 0
-        default:
-            // Default to portrait for unknown/faceUp/faceDown
-            rotationAngle = 90
-        }
+        // Get the current interface orientation from the window scene
+        // This is more reliable than UIDevice.current.orientation, especially for
+        // landscape-locked apps where device orientation may not match interface orientation
+        let rotationAngle: CGFloat = getVideoRotationAngle()
 
         // Use the modern videoRotationAngle API (iOS 17+)
         if connection.isVideoRotationAngleSupported(rotationAngle) {
             connection.videoRotationAngle = rotationAngle
         }
+    }
+
+    /// Determines the correct video rotation angle based on the current interface orientation.
+    /// Uses the window scene's interface orientation for accurate detection,
+    /// with fallback to device orientation and finally to landscape default.
+    private func getVideoRotationAngle() -> CGFloat {
+        // First, try to get orientation from the window scene (most reliable)
+        if let windowScene = self.window?.windowScene {
+            let interfaceOrientation = windowScene.interfaceOrientation
+            switch interfaceOrientation {
+            case .portrait:
+                return 90
+            case .portraitUpsideDown:
+                return 270
+            case .landscapeLeft:
+                // Interface landscapeLeft = home button on right = camera rotation 0
+                return 0
+            case .landscapeRight:
+                // Interface landscapeRight = home button on left = camera rotation 180
+                return 180
+            default:
+                break
+            }
+        }
+
+        // Fallback to device orientation if window scene is not available
+        let deviceOrientation = UIDevice.current.orientation
+        if deviceOrientation.isValidInterfaceOrientation {
+            switch deviceOrientation {
+            case .portrait:
+                return 90
+            case .portraitUpsideDown:
+                return 270
+            case .landscapeLeft:
+                // Device landscapeLeft (home button on right) = camera rotation 0
+                return 0
+            case .landscapeRight:
+                // Device landscapeRight (home button on left) = camera rotation 180
+                return 180
+            default:
+                break
+            }
+        }
+
+        // Default to landscape right (most common for bowling app usage)
+        // This matches the preview orientation where the device is held in landscape
+        // with the home button/indicator on the right side
+        return 0
     }
 
     // MARK: - Cleanup
