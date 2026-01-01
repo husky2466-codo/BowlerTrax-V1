@@ -1805,30 +1805,54 @@ class CalibrationPreviewUIView: UIView {
     private func updateVideoOrientation() {
         guard let connection = previewLayer?.connection else { return }
 
-        let deviceOrientation = UIDevice.current.orientation
-
-        // Map device orientation to video rotation angle (iOS 17+ API)
-        // Note: landscapeLeft/Right are inverted between UIDeviceOrientation and video rotation
-        let rotationAngle: CGFloat
-        switch deviceOrientation {
-        case .portrait:
-            rotationAngle = 90
-        case .portraitUpsideDown:
-            rotationAngle = 270
-        case .landscapeLeft:
-            // Device rotated left = camera should be landscape right
-            rotationAngle = 180
-        case .landscapeRight:
-            // Device rotated right = camera should be landscape left
-            rotationAngle = 0
-        default:
-            // Default to portrait for unknown/faceUp/faceDown
-            rotationAngle = 90
-        }
+        let rotationAngle = getVideoRotationAngle()
 
         // Use the modern videoRotationAngle API (iOS 17+)
         if connection.isVideoRotationAngleSupported(rotationAngle) {
             connection.videoRotationAngle = rotationAngle
+        }
+    }
+
+    private func getVideoRotationAngle() -> CGFloat {
+        // First, try to get orientation from the window scene (most reliable for landscape-locked apps)
+        if let windowScene = self.window?.windowScene {
+            let interfaceOrientation = windowScene.interfaceOrientation
+            switch interfaceOrientation {
+            case .portrait:
+                return 90
+            case .portraitUpsideDown:
+                return 270
+            case .landscapeLeft:
+                return 0
+            case .landscapeRight:
+                return 180
+            default:
+                break
+            }
+        }
+
+        // Fallback to device orientation
+        let deviceOrientation = UIDevice.current.orientation
+        switch deviceOrientation {
+        case .portrait:
+            return 90
+        case .portraitUpsideDown:
+            return 270
+        case .landscapeLeft:
+            return 0
+        case .landscapeRight:
+            return 180
+        default:
+            // Default to landscape for this bowling app
+            return 0
+        }
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        // Update orientation when view is added to window (window scene now available)
+        if window != nil {
+            updateVideoOrientation()
         }
     }
 }
