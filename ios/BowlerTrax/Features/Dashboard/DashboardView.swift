@@ -78,6 +78,9 @@ struct DashboardView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: BTSpacing.xl) {
+                // Logo header
+                logoHeader
+
                 // Welcome header
                 welcomeHeader
 
@@ -127,6 +130,21 @@ struct DashboardView: View {
         .navigationDestination(isPresented: $navigateToRecording) {
             RecordingView(calibration: selectedCalibration)
         }
+    }
+
+    // MARK: - Logo Header
+
+    private var logoHeader: some View {
+        VStack(spacing: 0) {
+            Image("FullLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 200)
+                .shadow(color: Color.btPrimary.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, BTSpacing.md)
+        .padding(.bottom, BTSpacing.sm)
     }
 
     // MARK: - Welcome Header

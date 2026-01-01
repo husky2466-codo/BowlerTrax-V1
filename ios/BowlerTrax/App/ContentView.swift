@@ -256,17 +256,17 @@ struct OnboardingView: View {
             VStack(spacing: BTSpacing.xl) {
                 Spacer()
 
-                Image(systemName: "figure.bowling")
-                    .font(.system(size: 100))
-                    .foregroundColor(.btPrimary)
-
-                Text("Welcome to BowlerTrax")
-                    .font(BTFont.largeTitle())
-                    .foregroundColor(.btTextPrimary)
+                // Full logo with text
+                Image("FullLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 280)
+                    .shadow(color: Color.btPrimary.opacity(0.4), radius: 12, x: 0, y: 6)
 
                 Text("Track your shots, improve your game")
                     .font(BTFont.body())
                     .foregroundColor(.btTextSecondary)
+                    .padding(.top, BTSpacing.md)
 
                 Spacer()
 

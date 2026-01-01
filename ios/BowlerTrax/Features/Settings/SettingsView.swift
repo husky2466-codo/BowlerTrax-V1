@@ -384,15 +384,25 @@ struct SettingsView: View {
 
     private var aboutSection: some View {
         Section {
-            HStack {
-                Text("Version")
-                    .font(BTFont.body())
-                    .foregroundColor(.btTextPrimary)
-                Spacer()
-                Text("1.0.0")
-                    .font(BTFont.body())
+            // Logo and branding
+            VStack(spacing: BTSpacing.md) {
+                Image("FullLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 200)
+                    .padding(.top, BTSpacing.md)
+
+                Text("Bowling Analytics Made Simple")
+                    .font(BTFont.caption())
+                    .foregroundColor(.btTextSecondary)
+                    .italic()
+
+                Text("Version \(appVersion) (\(buildNumber))")
+                    .font(BTFont.caption())
                     .foregroundColor(.btTextMuted)
+                    .padding(.bottom, BTSpacing.sm)
             }
+            .frame(maxWidth: .infinity)
             .listRowBackground(Color.btSurface)
 
             NavigationLink {
@@ -420,6 +430,16 @@ struct SettingsView: View {
                 .font(BTFont.labelSmall())
                 .foregroundColor(.btTextMuted)
         }
+    }
+
+    // MARK: - App Version Properties
+
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
+
+    private var buildNumber: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
     }
 
     // MARK: - Export Sheet
