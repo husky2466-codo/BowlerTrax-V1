@@ -2,7 +2,9 @@
 //  CalibrationProfile.swift
 //  BowlerTrax
 //
-//  Calibration profile for lane perspective correction
+//  Calibration profile for lane perspective correction.
+//  Supports comprehensive multi-point calibration for accurate
+//  ball tracking and metric calculation.
 //
 
 import Foundation
@@ -15,27 +17,151 @@ struct CalibrationProfile: Codable, Identifiable, Equatable, Sendable {
     var centerName: String
     var laneNumber: Int?
 
-    // Conversion factors
-    var pixelsPerFoot: Double
-    var pixelsPerBoard: Double
+    // MARK: - Primary Reference Points (Required)
 
-    // Reference points
+    /// Foul line Y position in pixels (0 ft from approach)
     var foulLineY: Double
-    var arrowsY: Double
+
+    /// Pin deck / pinsetter entrance Y position in pixels (60 ft from foul line)
+    var pinDeckY: Double?
+
+    /// Left gutter edge X position in pixels (board 1)
     var leftGutterX: Double
+
+    /// Right gutter edge X position in pixels (board 39)
     var rightGutterX: Double
 
-    // Camera info
+    // MARK: - Arrow Reference Points
+
+    /// Arrows row Y position in pixels (15 ft from foul line)
+    var arrowsY: Double
+
+    /// Individual arrow X positions (boards 5, 10, 15, 20, 25, 30, 35)
+    /// Array of 7 values corresponding to each arrow position
+    var arrowPositions: [Double]?
+
+    // MARK: - Derived Measurements (Calculated)
+
+    /// Pixels per foot (calculated from foulLine to arrows or pinDeck)
+    var pixelsPerFoot: Double
+
+    /// Pixels per board (calculated from left to right gutter)
+    var pixelsPerBoard: Double
+
+    /// Total lane width in pixels (rightGutterX - leftGutterX)
+    var laneWidthPixels: Double {
+        rightGutterX - leftGutterX
+    }
+
+    /// Total lane length in pixels (pinDeckY to foulLineY)
+    var laneLengthPixels: Double? {
+        guard let pinDeck = pinDeckY else { return nil }
+        return abs(foulLineY - pinDeck)
+    }
+
+    // MARK: - Breakpoint Zone (Optional)
+
+    /// Breakpoint zone start Y position (~35 ft from foul line)
+    var breakpointStartY: Double?
+
+    /// Breakpoint zone end Y position (~45 ft from foul line)
+    var breakpointEndY: Double?
+
+    // MARK: - Ball Return (Optional)
+
+    /// Left ball return edge X position
+    var ballReturnLeftX: Double?
+
+    /// Right ball return edge X position
+    var ballReturnRightX: Double?
+
+    // MARK: - Camera Info
+
+    /// Camera height in feet (optional)
     var cameraHeightFt: Double?
+
+    /// Camera angle in degrees (optional)
     var cameraAngleDeg: Double?
 
-    // Crop zone (normalized 0-1 coordinates)
+    // MARK: - Crop Zone
+
+    /// Crop zone rectangle (normalized 0-1 coordinates)
     var cropRect: CGRect?
+
+    /// Whether crop zone is enabled
     var cropEnabled: Bool
+
+    // MARK: - Calibration Quality
+
+    /// Overall calibration confidence (0-1)
+    var calibrationConfidence: Double?
+
+    /// Which calibration points were auto-detected vs manually set
+    var autoDetectedPoints: CalibrationPointFlags?
+
+    // MARK: - Metadata
 
     let createdAt: Date
     var lastUsed: Date?
 
+    /// Calibration version for migration support
+    var version: Int = 2
+
+    // MARK: - Initialization
+
+    init(
+        id: UUID = UUID(),
+        centerId: UUID,
+        centerName: String,
+        laneNumber: Int? = nil,
+        foulLineY: Double,
+        pinDeckY: Double? = nil,
+        leftGutterX: Double,
+        rightGutterX: Double,
+        arrowsY: Double,
+        arrowPositions: [Double]? = nil,
+        pixelsPerFoot: Double,
+        pixelsPerBoard: Double,
+        breakpointStartY: Double? = nil,
+        breakpointEndY: Double? = nil,
+        ballReturnLeftX: Double? = nil,
+        ballReturnRightX: Double? = nil,
+        cameraHeightFt: Double? = nil,
+        cameraAngleDeg: Double? = nil,
+        cropRect: CGRect? = nil,
+        cropEnabled: Bool = false,
+        calibrationConfidence: Double? = nil,
+        autoDetectedPoints: CalibrationPointFlags? = nil,
+        createdAt: Date = Date(),
+        lastUsed: Date? = nil
+    ) {
+        self.id = id
+        self.centerId = centerId
+        self.centerName = centerName
+        self.laneNumber = laneNumber
+        self.foulLineY = foulLineY
+        self.pinDeckY = pinDeckY
+        self.leftGutterX = leftGutterX
+        self.rightGutterX = rightGutterX
+        self.arrowsY = arrowsY
+        self.arrowPositions = arrowPositions
+        self.pixelsPerFoot = pixelsPerFoot
+        self.pixelsPerBoard = pixelsPerBoard
+        self.breakpointStartY = breakpointStartY
+        self.breakpointEndY = breakpointEndY
+        self.ballReturnLeftX = ballReturnLeftX
+        self.ballReturnRightX = ballReturnRightX
+        self.cameraHeightFt = cameraHeightFt
+        self.cameraAngleDeg = cameraAngleDeg
+        self.cropRect = cropRect
+        self.cropEnabled = cropEnabled
+        self.calibrationConfidence = calibrationConfidence
+        self.autoDetectedPoints = autoDetectedPoints
+        self.createdAt = createdAt
+        self.lastUsed = lastUsed
+    }
+
+    /// Convenience initializer for backward compatibility with v1 calibrations
     init(
         id: UUID = UUID(),
         centerId: UUID,
@@ -58,19 +184,50 @@ struct CalibrationProfile: Codable, Identifiable, Equatable, Sendable {
         self.centerId = centerId
         self.centerName = centerName
         self.laneNumber = laneNumber
-        self.pixelsPerFoot = pixelsPerFoot
-        self.pixelsPerBoard = pixelsPerBoard
         self.foulLineY = foulLineY
-        self.arrowsY = arrowsY
+        self.pinDeckY = nil
         self.leftGutterX = leftGutterX
         self.rightGutterX = rightGutterX
+        self.arrowsY = arrowsY
+        self.arrowPositions = nil
+        self.pixelsPerFoot = pixelsPerFoot
+        self.pixelsPerBoard = pixelsPerBoard
+        self.breakpointStartY = nil
+        self.breakpointEndY = nil
+        self.ballReturnLeftX = nil
+        self.ballReturnRightX = nil
         self.cameraHeightFt = cameraHeightFt
         self.cameraAngleDeg = cameraAngleDeg
         self.cropRect = cropRect
         self.cropEnabled = cropEnabled
+        self.calibrationConfidence = nil
+        self.autoDetectedPoints = nil
         self.createdAt = createdAt
         self.lastUsed = lastUsed
+        self.version = 1
     }
+}
+
+// MARK: - Calibration Point Flags
+
+/// Flags indicating which calibration points were auto-detected
+struct CalibrationPointFlags: Codable, Equatable, Sendable {
+    var foulLine: Bool = false
+    var pinDeck: Bool = false
+    var leftGutter: Bool = false
+    var rightGutter: Bool = false
+    var arrows: Bool = false
+    var breakpoint: Bool = false
+    var ballReturn: Bool = false
+
+    /// Number of points that were auto-detected
+    var autoDetectedCount: Int {
+        [foulLine, pinDeck, leftGutter, rightGutter, arrows, breakpoint, ballReturn]
+            .filter { $0 }.count
+    }
+
+    /// Total number of detectable points
+    static let totalPoints = 7
 }
 
 // MARK: - Pixel Conversion Methods
@@ -118,11 +275,6 @@ extension CalibrationProfile {
 // MARK: - Computed Properties
 
 extension CalibrationProfile {
-    /// Total lane width in pixels
-    var laneWidthPixels: Double {
-        rightGutterX - leftGutterX
-    }
-
     /// Distance from foul line to arrows in pixels
     var foulToArrowsPixels: Double {
         foulLineY - arrowsY
@@ -145,6 +297,46 @@ extension CalibrationProfile {
     /// Check if crop zone is configured and enabled
     var hasCropZone: Bool {
         cropEnabled && cropRect != nil
+    }
+
+    /// Check if this is a comprehensive (v2) calibration with all points
+    var isComprehensive: Bool {
+        pinDeckY != nil && version >= 2
+    }
+
+    /// Estimated breakpoint Y position (35 ft from foul line)
+    var estimatedBreakpointY: Double? {
+        guard pixelsPerFoot > 0 else { return nil }
+        let breakpointY = foulLineY - (35.0 * pixelsPerFoot)
+        return breakpointY > 0 ? breakpointY : nil
+    }
+
+    /// Estimated pin deck Y position (60 ft from foul line)
+    var estimatedPinDeckY: Double {
+        pinDeckY ?? (foulLineY - (60.0 * pixelsPerFoot))
+    }
+
+    /// Get arrow X position for a specific arrow number (1-7)
+    func arrowXPosition(arrowNumber: Int) -> Double? {
+        guard arrowNumber >= 1 && arrowNumber <= 7 else { return nil }
+
+        // If we have stored arrow positions, use them
+        if let positions = arrowPositions, positions.count >= arrowNumber {
+            return positions[arrowNumber - 1]
+        }
+
+        // Otherwise calculate from board positions
+        let arrowBoards = [5, 10, 15, 20, 25, 30, 35]
+        let boardNumber = arrowBoards[arrowNumber - 1]
+        return boardToPixel(Double(boardNumber))
+    }
+
+    /// Get all arrow X positions (calculated if not stored)
+    var allArrowXPositions: [Double] {
+        if let positions = arrowPositions, positions.count == 7 {
+            return positions
+        }
+        return (1...7).compactMap { arrowXPosition(arrowNumber: $0) }
     }
 }
 

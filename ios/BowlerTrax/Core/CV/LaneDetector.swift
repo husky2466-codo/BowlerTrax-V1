@@ -78,12 +78,15 @@ final class LaneDetector: @unchecked Sendable {
         // Step 2: Find vertical lines (gutter edges)
         let verticalLines = findVerticalLines(from: contours, imageSize: CGSize(width: width, height: height))
 
-        // Step 3: Find horizontal lines (foul line)
+        // Step 3: Find horizontal lines (foul line and pin deck)
         let horizontalLines = findHorizontalLines(from: contours, imageSize: CGSize(width: width, height: height))
 
         // Step 4: Analyze lane structure
         let (leftGutter, rightGutter) = identifyGutterLines(from: verticalLines)
         let foulLine = identifyFoulLine(from: horizontalLines, imageHeight: height)
+
+        // Step 4b: Detect pin deck line (top of lane in camera view)
+        let pinDeckLine = identifyPinDeckLine(from: horizontalLines, foulLine: foulLine, imageHeight: height)
 
         // Step 5: Detect arrows (if enabled)
         var arrows: [ArrowDetection]? = nil
@@ -95,11 +98,19 @@ final class LaneDetector: @unchecked Sendable {
             )
         }
 
+        // Step 5b: Calculate breakpoint zone (if foul line and pin deck detected)
+        let breakpointZone = calculateBreakpointZone(
+            foulLineY: foulLine?.midpoint.y,
+            pinDeckY: pinDeckLine?.midpoint.y,
+            imageHeight: height
+        )
+
         // Step 6: Calculate confidence
         let confidence = calculateConfidence(
             leftGutter: leftGutter,
             rightGutter: rightGutter,
             foulLine: foulLine,
+            pinDeckLine: pinDeckLine,
             arrows: arrows
         )
 
@@ -108,6 +119,7 @@ final class LaneDetector: @unchecked Sendable {
             leftGutter: leftGutter,
             rightGutter: rightGutter,
             foulLine: foulLine,
+            pinDeckLine: pinDeckLine,
             imageSize: CGSize(width: width, height: height)
         )
 
@@ -120,7 +132,16 @@ final class LaneDetector: @unchecked Sendable {
                     end: normalizePoint(line.end, size: CGSize(width: width, height: height))
                 )
             },
+            pinDeckLine: pinDeckLine.map { line in
+                LineSeg(
+                    start: normalizePoint(line.start, size: CGSize(width: width, height: height)),
+                    end: normalizePoint(line.end, size: CGSize(width: width, height: height))
+                )
+            },
             arrowPositions: arrows,
+            breakpointZone: breakpointZone.map { zone in
+                (start: zone.start / height, end: zone.end / height)
+            },
             confidence: confidence,
             laneRectangle: laneRect.map { rect in
                 CGRect(
@@ -384,6 +405,69 @@ final class LaneDetector: @unchecked Sendable {
         return candidateLines.max { $0.length < $1.length }
     }
 
+    /// Identify the pin deck line (where the lane meets the pinsetter)
+    /// This is the topmost horizontal line in the camera view (60 ft from foul line)
+    private func identifyPinDeckLine(
+        from horizontalLines: [LineSeg],
+        foulLine: LineSeg?,
+        imageHeight: CGFloat
+    ) -> LineSeg? {
+        guard !horizontalLines.isEmpty else { return nil }
+
+        // Pin deck should be in the upper portion of the frame
+        // (camera is behind bowler, pin deck is near top of lane view)
+        let topThreshold = imageHeight * 0.4
+
+        // Filter for lines in the top portion that are above the foul line
+        let candidateLines = horizontalLines.filter { line in
+            line.midpoint.y < topThreshold
+        }
+
+        guard !candidateLines.isEmpty else { return nil }
+
+        // If we have a foul line, ensure pin deck candidate is above it
+        if let foul = foulLine {
+            let validCandidates = candidateLines.filter { $0.midpoint.y < foul.midpoint.y }
+            if !validCandidates.isEmpty {
+                // Find the longest horizontal line in the top portion
+                return validCandidates.max { $0.length < $1.length }
+            }
+        }
+
+        // Find the longest horizontal line in the top portion
+        return candidateLines.max { $0.length < $1.length }
+    }
+
+    /// Calculate breakpoint zone (approximately 35-45 ft from foul line)
+    private func calculateBreakpointZone(
+        foulLineY: CGFloat?,
+        pinDeckY: CGFloat?,
+        imageHeight: CGFloat
+    ) -> (start: CGFloat, end: CGFloat)? {
+        guard let foul = foulLineY else { return nil }
+
+        // If we have pin deck, calculate based on actual lane detection
+        if let pinDeck = pinDeckY {
+            let laneLength = foul - pinDeck  // In screen coords, foul is below pin deck
+            // Breakpoint is at ~35-45 ft on a 60 ft lane (58-75% of lane length)
+            let breakpointStartRatio: CGFloat = 0.58  // ~35 ft from foul line
+            let breakpointEndRatio: CGFloat = 0.75    // ~45 ft from foul line
+
+            let breakpointStart = pinDeck + (laneLength * (1 - breakpointStartRatio))
+            let breakpointEnd = pinDeck + (laneLength * (1 - breakpointEndRatio))
+
+            return (start: breakpointStart, end: breakpointEnd)
+        }
+
+        // Otherwise estimate based on foul line position
+        // Assume foul line is at ~85% of image height
+        let estimatedLaneLength = foul * 0.85
+        let breakpointStart = foul - (estimatedLaneLength * 0.58)
+        let breakpointEnd = foul - (estimatedLaneLength * 0.75)
+
+        return (start: breakpointStart, end: breakpointEnd)
+    }
+
     // MARK: - Arrow Detection
 
     private func detectArrows(
@@ -553,6 +637,21 @@ final class LaneDetector: @unchecked Sendable {
             )
         }
 
+        // Average the pin deck line positions
+        var avgPinDeckLine: LineSeg? = nil
+        let pinDeckLines = confidentResults.compactMap { $0.pinDeckLine }
+        if !pinDeckLines.isEmpty {
+            let avgStartX = pinDeckLines.map { $0.start.x }.reduce(0, +) / CGFloat(pinDeckLines.count)
+            let avgStartY = pinDeckLines.map { $0.start.y }.reduce(0, +) / CGFloat(pinDeckLines.count)
+            let avgEndX = pinDeckLines.map { $0.end.x }.reduce(0, +) / CGFloat(pinDeckLines.count)
+            let avgEndY = pinDeckLines.map { $0.end.y }.reduce(0, +) / CGFloat(pinDeckLines.count)
+
+            avgPinDeckLine = LineSeg(
+                start: CGPoint(x: avgStartX, y: avgStartY),
+                end: CGPoint(x: avgEndX, y: avgEndY)
+            )
+        }
+
         // Merge arrow detections, keeping most confident
         var mergedArrows: [ArrowDetection] = []
         for result in confidentResults {
@@ -576,7 +675,9 @@ final class LaneDetector: @unchecked Sendable {
             leftGutterLine: best.leftGutterLine,
             rightGutterLine: best.rightGutterLine,
             foulLine: avgFoulLine ?? best.foulLine,
+            pinDeckLine: avgPinDeckLine ?? best.pinDeckLine,
             arrowPositions: mergedArrows.isEmpty ? nil : mergedArrows.sorted { $0.boardNumber < $1.boardNumber },
+            breakpointZone: best.breakpointZone,
             confidence: avgConfidence,
             laneRectangle: best.laneRectangle,
             vanishingPoint: best.vanishingPoint,
@@ -590,18 +691,24 @@ final class LaneDetector: @unchecked Sendable {
         leftGutter: [CGPoint]?,
         rightGutter: [CGPoint]?,
         foulLine: LineSeg?,
+        pinDeckLine: LineSeg? = nil,
         arrows: [ArrowDetection]?
     ) -> Double {
         var confidence: Double = 0
 
-        // Foul line is most important (40%)
+        // Foul line is most important (35%)
         if foulLine != nil {
-            confidence += 0.4
+            confidence += 0.35
         }
 
-        // Lane edges (30% total)
-        if leftGutter != nil { confidence += 0.15 }
-        if rightGutter != nil { confidence += 0.15 }
+        // Pin deck adds 10%
+        if pinDeckLine != nil {
+            confidence += 0.10
+        }
+
+        // Lane edges (25% total)
+        if leftGutter != nil { confidence += 0.125 }
+        if rightGutter != nil { confidence += 0.125 }
 
         // Arrows (30% total, 10% per arrow up to 3)
         let arrowCount = min(arrows?.count ?? 0, 3)
@@ -614,6 +721,7 @@ final class LaneDetector: @unchecked Sendable {
         leftGutter: [CGPoint]?,
         rightGutter: [CGPoint]?,
         foulLine: LineSeg?,
+        pinDeckLine: LineSeg? = nil,
         imageSize: CGSize
     ) -> CGRect? {
         guard let left = leftGutter?.first,
@@ -625,7 +733,14 @@ final class LaneDetector: @unchecked Sendable {
         let minX = min(left.x, foul.start.x)
         let maxX = max(right.x, foul.end.x)
         let maxY = max(foul.start.y, foul.end.y)
-        let minY: CGFloat = 0  // Top of frame
+
+        // Use pin deck if available, otherwise top of frame
+        let minY: CGFloat
+        if let pinDeck = pinDeckLine {
+            minY = min(pinDeck.start.y, pinDeck.end.y)
+        } else {
+            minY = 0  // Top of frame
+        }
 
         return CGRect(
             x: minX,

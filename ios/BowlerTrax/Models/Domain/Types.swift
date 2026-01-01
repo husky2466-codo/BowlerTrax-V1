@@ -203,20 +203,24 @@ enum BallPhase: String, Codable, CaseIterable, Sendable {
     }
 }
 
-/// Calibration wizard step
+/// Calibration wizard step for comprehensive lane calibration
 enum CalibrationStep: String, Codable, CaseIterable, Sendable {
-    case position     // Position camera
-    case foulLine     // Mark foul line
-    case arrows       // Mark arrows
-    case verify       // Verify calibration
-    case cropZone     // Set crop zone (optional)
-    case complete     // Done
+    case position       // Step 1: Position camera
+    case foulLine       // Step 2: Mark foul line (0 ft)
+    case pinDeck        // Step 3: Mark pin deck / pinsetter entrance (60 ft)
+    case gutters        // Step 4: Mark left and right gutter edges
+    case arrows         // Step 5: Mark arrows (15 ft) - auto-detect or tap center arrow
+    case verify         // Step 6: Verify all calibration points with overlay
+    case cropZone       // Step 7: Set optional crop zone
+    case complete       // Step 8: Save and complete
 
     var displayName: String {
         switch self {
         case .position: return "Position Camera"
-        case .foulLine: return "Mark Foul Line"
-        case .arrows: return "Mark Arrows"
+        case .foulLine: return "Foul Line"
+        case .pinDeck: return "Pin Deck"
+        case .gutters: return "Lane Edges"
+        case .arrows: return "Arrows"
         case .verify: return "Verify"
         case .cropZone: return "Crop Zone"
         case .complete: return "Complete"
@@ -227,19 +231,76 @@ enum CalibrationStep: String, Codable, CaseIterable, Sendable {
         switch self {
         case .position: return 1
         case .foulLine: return 2
-        case .arrows: return 3
-        case .verify: return 4
-        case .cropZone: return 5
-        case .complete: return 6
+        case .pinDeck: return 3
+        case .gutters: return 4
+        case .arrows: return 5
+        case .verify: return 6
+        case .cropZone: return 7
+        case .complete: return 8
+        }
+    }
+
+    /// Instructions for this step
+    var instructions: String {
+        switch self {
+        case .position:
+            return "Position your camera 5-6 feet behind the approach, elevated to see the entire lane."
+        case .foulLine:
+            return "Tap on the foul line or use Auto-Detect. This is where the approach meets the lane."
+        case .pinDeck:
+            return "Tap where the lane meets the pinsetter. This marks the end of the lane (60 ft)."
+        case .gutters:
+            return "Tap the left gutter edge, then the right gutter edge to define lane boundaries."
+        case .arrows:
+            return "Tap on two arrows (any two) to calibrate board positions. Arrows are 15 ft from the foul line."
+        case .verify:
+            return "Review the calibration overlay. Lines should align with actual lane markings."
+        case .cropZone:
+            return "Optionally set a crop zone to focus on a specific area of the lane."
+        case .complete:
+            return "Save your calibration profile for this lane."
         }
     }
 
     /// Whether this step is optional (user can skip)
     var isOptional: Bool {
         switch self {
-        case .cropZone: return true
-        default: return false
+        case .pinDeck, .cropZone:
+            // Pin deck is optional - can be estimated from arrows/foul line
+            // Crop zone is optional - for focusing on specific lane area
+            return true
+        default:
+            return false
         }
+    }
+
+    /// Whether this step supports auto-detection
+    var supportsAutoDetect: Bool {
+        switch self {
+        case .foulLine, .pinDeck, .gutters, .arrows:
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Total number of steps
+    static var totalSteps: Int { allCases.count }
+
+    /// Get next step
+    var next: CalibrationStep? {
+        let allCases = CalibrationStep.allCases
+        guard let currentIndex = allCases.firstIndex(of: self),
+              currentIndex + 1 < allCases.count else { return nil }
+        return allCases[currentIndex + 1]
+    }
+
+    /// Get previous step
+    var previous: CalibrationStep? {
+        let allCases = CalibrationStep.allCases
+        guard let currentIndex = allCases.firstIndex(of: self),
+              currentIndex > 0 else { return nil }
+        return allCases[currentIndex - 1]
     }
 }
 

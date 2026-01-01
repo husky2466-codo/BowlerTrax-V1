@@ -2,12 +2,15 @@
 //  CalibrationView.swift
 //  BowlerTrax
 //
-//  5-step calibration wizard for lane setup:
+//  8-step comprehensive calibration wizard for lane setup:
 //  1. Position Camera
-//  2. Mark Foul Line (with Auto-Detect option)
-//  3. Mark Arrows (with Auto-Detect option)
-//  4. Verify Calibration
-//  5. Save & Complete
+//  2. Mark Foul Line (0 ft) with Auto-Detect option
+//  3. Mark Pin Deck (60 ft) - optional, for full lane calibration
+//  4. Mark Lane Edges (Gutters) - left and right boundaries
+//  5. Mark Arrows (15 ft) with Auto-Detect option
+//  6. Verify Calibration - review overlay of all points
+//  7. Crop Zone (optional)
+//  8. Save & Complete
 //
 
 import SwiftUI
@@ -15,6 +18,15 @@ import SwiftData
 import AVFoundation
 import PhotosUI
 import CoreMedia
+
+// MARK: - Gutter Tap State
+
+/// State for the two-tap gutter edge selection
+enum GutterTapState {
+    case waitingForLeft
+    case waitingForRight
+    case complete
+}
 
 // MARK: - Calibration View
 
@@ -49,25 +61,32 @@ struct CalibrationView: View {
     @State private var selectedPhotoItem: PhotosPickerItem? = nil
     @State private var isTestMode = false
 
-    // Step 2 - Foul Line
+    // Step 2 - Foul Line (0 ft)
     @State private var foulLineY: CGFloat? = nil
     @State private var foulLineTapPoint: CGPoint? = nil
 
-    // Step 3 - Arrows
+    // Step 3 - Pin Deck (60 ft) - optional but recommended for accurate measurements
+    @State private var pinDeckY: CGFloat? = nil
+    @State private var pinDeckTapPoint: CGPoint? = nil
+
+    // Step 4 - Gutter Edges (lane boundaries)
+    @State private var leftGutterX: CGFloat = 0
+    @State private var rightGutterX: CGFloat = 0
+    @State private var leftGutterTapPoint: CGPoint? = nil
+    @State private var rightGutterTapPoint: CGPoint? = nil
+    @State private var gutterTapState: GutterTapState = .waitingForLeft
+
+    // Step 5 - Arrows (15 ft)
     @State private var arrow1Position: CGPoint? = nil
     @State private var arrow2Position: CGPoint? = nil
     @State private var arrow1Board: Int = 10
     @State private var arrow2Board: Int = 25
 
-    // Step 3 - Gutter detection (estimated from arrow positions)
-    @State private var leftGutterX: CGFloat = 0
-    @State private var rightGutterX: CGFloat = 0
-
-    // Step 5 - Crop Zone
+    // Step 7 - Crop Zone
     @State private var cropRect: CGRect = CGRect(x: 0.1, y: 0.1, width: 0.8, height: 0.8)
     @State private var cropEnabled: Bool = false
 
-    // Step 6 - Save
+    // Step 8 - Save
     @State private var centerName: String = ""
     @State private var laneNumber: String = ""
 
@@ -76,8 +95,15 @@ struct CalibrationView: View {
 
     // MARK: - Computed Properties
 
-    /// Calculated pixels per board from arrow positions
+    /// Calculated pixels per board from arrow positions or gutter positions
     private var calculatedPixelsPerBoard: Double {
+        // Prefer gutter-based calculation if both gutters are set
+        if leftGutterX > 0 && rightGutterX > 0 && rightGutterX > leftGutterX {
+            let laneWidthPixels = rightGutterX - leftGutterX
+            return laneWidthPixels / 39.0  // Lane is 39 boards wide
+        }
+
+        // Fall back to arrow-based calculation
         guard let p1 = arrow1Position, let p2 = arrow2Position else { return 0 }
         let pixelDifference = abs(p2.x - p1.x)
         let boardDifference = abs(Double(arrow2Board - arrow1Board))
@@ -85,11 +111,20 @@ struct CalibrationView: View {
         return pixelDifference / boardDifference
     }
 
-    /// Calculated pixels per foot (arrows are 15ft from foul line)
+    /// Calculated pixels per foot
+    /// Uses pin deck if available (60 ft), otherwise uses arrows (15 ft from foul line)
     private var calculatedPixelsPerFoot: Double {
-        guard let foulY = foulLineY,
-              let p1 = arrow1Position,
-              let p2 = arrow2Position else { return 0 }
+        guard let foulY = foulLineY else { return 0 }
+
+        // Prefer pin deck-based calculation for full lane length
+        if let pinY = pinDeckY {
+            let pixelDifference = abs(foulY - pinY)
+            guard pixelDifference > 0 else { return 0 }
+            return pixelDifference / 60.0  // Lane is 60 feet long
+        }
+
+        // Fall back to arrow-based calculation
+        guard let p1 = arrow1Position, let p2 = arrow2Position else { return 0 }
         let avgArrowY = (p1.y + p2.y) / 2
         let pixelDifference = abs(foulY - avgArrowY)
         // Arrows are 15 feet from foul line
@@ -104,8 +139,26 @@ struct CalibrationView: View {
 
     /// Estimate lane width from calibration
     private var estimatedLaneWidthPixels: Double {
-        // Lane is 39 boards wide
+        if leftGutterX > 0 && rightGutterX > 0 {
+            return Double(rightGutterX - leftGutterX)
+        }
+        // Fall back to board-based estimate
         return calculatedPixelsPerBoard * 39.0
+    }
+
+    /// Estimate lane length in pixels
+    private var estimatedLaneLengthPixels: Double {
+        guard let foulY = foulLineY else { return 0 }
+        if let pinY = pinDeckY {
+            return abs(foulY - pinY)
+        }
+        // Estimate from pixels per foot
+        return calculatedPixelsPerFoot * 60.0
+    }
+
+    /// Whether comprehensive calibration is complete (includes pin deck and gutters)
+    private var isComprehensiveCalibration: Bool {
+        pinDeckY != nil && leftGutterX > 0 && rightGutterX > 0
     }
 
     // MARK: - Body
@@ -149,7 +202,7 @@ struct CalibrationView: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Text("Step \(currentStep.stepNumber) of 6")
+                    Text("Step \(currentStep.stepNumber) of \(CalibrationStep.totalSteps)")
                         .font(BTFont.caption())
                         .foregroundColor(.btTextMuted)
                 }
@@ -187,6 +240,10 @@ struct CalibrationView: View {
             positionStep
         case .foulLine:
             foulLineStep
+        case .pinDeck:
+            pinDeckStep
+        case .gutters:
+            guttersStep
         case .arrows:
             arrowsStep
         case .verify:
@@ -524,7 +581,374 @@ struct CalibrationView: View {
         .cornerRadius(10)
     }
 
-    // MARK: - Step 3: Arrows
+    // MARK: - Step 3: Pin Deck (60 ft)
+
+    private var pinDeckStep: some View {
+        GeometryReader { outerGeometry in
+            VStack(spacing: BTSpacing.md) {
+                // Title (compact)
+                VStack(spacing: BTSpacing.xs) {
+                    HStack {
+                        Text("Mark Pin Deck")
+                            .font(BTFont.h2())
+                            .foregroundColor(.btTextPrimary)
+
+                        Text("(Optional)")
+                            .font(BTFont.caption())
+                            .foregroundColor(.btTextMuted)
+                    }
+
+                    Text("Tap where the lane meets the pinsetter (60 ft from foul line)")
+                        .font(BTFont.body())
+                        .foregroundColor(.btTextSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+
+                // Camera preview
+                ZStack {
+                    CalibrationCameraPreview(cameraManager: cameraManager)
+                        .cornerRadius(12)
+
+                    // Overlay for tap gesture and markers
+                    GeometryReader { geometry in
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onEnded { value in
+                                        let location = value.location
+                                        pinDeckY = location.y
+                                        pinDeckTapPoint = location
+                                        previewSize = geometry.size
+                                    }
+                            )
+
+                        // Show foul line from previous step
+                        if let foulY = foulLineY {
+                            Rectangle()
+                                .fill(Color.btWarning.opacity(0.6))
+                                .frame(height: 2)
+                                .position(x: geometry.size.width / 2, y: foulY)
+
+                            Text("FOUL LINE (0 ft)")
+                                .font(BTFont.captionSmall())
+                                .foregroundColor(.btWarning)
+                                .position(x: 80, y: foulY + 12)
+                        }
+
+                        // Pin deck marker
+                        if let pinY = pinDeckY {
+                            Rectangle()
+                                .fill(Color.btAccent)
+                                .frame(height: 3)
+                                .shadow(color: .btAccent.opacity(0.5), radius: 4)
+                                .position(x: geometry.size.width / 2, y: pinY)
+
+                            // Tap point indicator
+                            if let tapPoint = pinDeckTapPoint {
+                                Circle()
+                                    .fill(Color.btSuccess)
+                                    .frame(width: 16, height: 16)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.white, lineWidth: 2)
+                                    )
+                                    .position(tapPoint)
+                            }
+
+                            Text("PIN DECK (60 ft)")
+                                .font(BTFont.captionSmall())
+                                .foregroundColor(.btAccent)
+                                .position(x: 80, y: pinY - 12)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.btBorder, lineWidth: 1)
+                )
+
+                // Status bar
+                pinDeckStatusBar
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.horizontal, BTLayout.screenHorizontalPadding)
+        }
+    }
+
+    /// Pin deck status bar
+    private var pinDeckStatusBar: some View {
+        Group {
+            if let pinY = pinDeckY {
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.btSuccess)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Pin Deck Position: Y = \(Int(pinY)) px")
+                            .font(BTFont.body())
+                            .foregroundColor(.btTextPrimary)
+
+                        if let foulY = foulLineY {
+                            let distance = abs(foulY - pinY)
+                            Text("Lane length: \(Int(distance)) px")
+                                .font(BTFont.captionSmall())
+                                .foregroundColor(.btTextSecondary)
+                        }
+                    }
+
+                    Spacer()
+
+                    Button("Redo") {
+                        pinDeckY = nil
+                        pinDeckTapPoint = nil
+                    }
+                    .font(BTFont.label())
+                    .foregroundColor(.btPrimary)
+                }
+            } else {
+                HStack {
+                    Image(systemName: "circle")
+                        .foregroundColor(.btTextMuted)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Pin Deck Position: NOT SET")
+                            .font(BTFont.body())
+                            .foregroundColor(.btTextMuted)
+
+                        Text("Optional - provides more accurate distance measurements")
+                            .font(BTFont.captionSmall())
+                            .foregroundColor(.btTextMuted)
+                    }
+
+                    Spacer()
+                }
+            }
+        }
+        .padding(BTSpacing.md)
+        .background(Color.btSurface)
+        .cornerRadius(10)
+    }
+
+    // MARK: - Step 4: Gutters (Lane Edges)
+
+    private var guttersStep: some View {
+        GeometryReader { outerGeometry in
+            VStack(spacing: BTSpacing.md) {
+                // Title (compact)
+                VStack(spacing: BTSpacing.xs) {
+                    Text("Mark Lane Edges")
+                        .font(BTFont.h2())
+                        .foregroundColor(.btTextPrimary)
+
+                    Text(gutterInstructionText)
+                        .font(BTFont.body())
+                        .foregroundColor(.btTextSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+
+                // Camera preview
+                ZStack {
+                    CalibrationCameraPreview(cameraManager: cameraManager)
+                        .cornerRadius(12)
+
+                    // Overlay for tap gesture and markers
+                    GeometryReader { geometry in
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onEnded { value in
+                                        let location = value.location
+                                        handleGutterTap(at: location, in: geometry.size)
+                                    }
+                            )
+
+                        // Show foul line
+                        if let foulY = foulLineY {
+                            Rectangle()
+                                .fill(Color.btWarning.opacity(0.4))
+                                .frame(height: 1)
+                                .position(x: geometry.size.width / 2, y: foulY)
+                        }
+
+                        // Show pin deck if set
+                        if let pinY = pinDeckY {
+                            Rectangle()
+                                .fill(Color.btAccent.opacity(0.4))
+                                .frame(height: 1)
+                                .position(x: geometry.size.width / 2, y: pinY)
+                        }
+
+                        // Left gutter marker
+                        if leftGutterX > 0 {
+                            Rectangle()
+                                .fill(Color.btSuccess)
+                                .frame(width: 3)
+                                .shadow(color: .btSuccess.opacity(0.5), radius: 4)
+                                .position(x: leftGutterX, y: geometry.size.height / 2)
+
+                            Text("LEFT")
+                                .font(BTFont.captionSmall())
+                                .foregroundColor(.btSuccess)
+                                .position(x: leftGutterX, y: 20)
+                        }
+
+                        // Right gutter marker
+                        if rightGutterX > 0 {
+                            Rectangle()
+                                .fill(Color.btSuccess)
+                                .frame(width: 3)
+                                .shadow(color: .btSuccess.opacity(0.5), radius: 4)
+                                .position(x: rightGutterX, y: geometry.size.height / 2)
+
+                            Text("RIGHT")
+                                .font(BTFont.captionSmall())
+                                .foregroundColor(.btSuccess)
+                                .position(x: rightGutterX, y: 20)
+                        }
+
+                        // Tap point indicators
+                        if let tapPoint = leftGutterTapPoint {
+                            Circle()
+                                .fill(Color.btSuccess)
+                                .frame(width: 12, height: 12)
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .position(tapPoint)
+                        }
+
+                        if let tapPoint = rightGutterTapPoint {
+                            Circle()
+                                .fill(Color.btSuccess)
+                                .frame(width: 12, height: 12)
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .position(tapPoint)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.btBorder, lineWidth: 1)
+                )
+
+                // Status bar
+                guttersStatusBar
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.horizontal, BTLayout.screenHorizontalPadding)
+        }
+    }
+
+    /// Instruction text for gutter step
+    private var gutterInstructionText: String {
+        switch gutterTapState {
+        case .waitingForLeft:
+            return "Tap on the LEFT gutter edge (board 1)"
+        case .waitingForRight:
+            return "Now tap on the RIGHT gutter edge (board 39)"
+        case .complete:
+            return "Lane boundaries marked"
+        }
+    }
+
+    /// Handle tap for gutter edges
+    private func handleGutterTap(at location: CGPoint, in size: CGSize) {
+        switch gutterTapState {
+        case .waitingForLeft:
+            leftGutterX = location.x
+            leftGutterTapPoint = location
+            gutterTapState = .waitingForRight
+            previewSize = size
+        case .waitingForRight:
+            rightGutterX = location.x
+            rightGutterTapPoint = location
+            gutterTapState = .complete
+            previewSize = size
+        case .complete:
+            // Allow re-tapping to adjust
+            // Determine if closer to left or right
+            let distToLeft = abs(location.x - leftGutterX)
+            let distToRight = abs(location.x - rightGutterX)
+            if distToLeft < distToRight {
+                leftGutterX = location.x
+                leftGutterTapPoint = location
+            } else {
+                rightGutterX = location.x
+                rightGutterTapPoint = location
+            }
+        }
+    }
+
+    /// Gutters status bar
+    private var guttersStatusBar: some View {
+        VStack(spacing: BTSpacing.sm) {
+            HStack {
+                // Left gutter status
+                HStack(spacing: BTSpacing.xs) {
+                    Image(systemName: leftGutterX > 0 ? "checkmark.circle.fill" : "circle")
+                        .foregroundColor(leftGutterX > 0 ? .btSuccess : .btTextMuted)
+
+                    Text("Left: \(leftGutterX > 0 ? "X = \(Int(leftGutterX)) px" : "NOT SET")")
+                        .font(BTFont.caption())
+                        .foregroundColor(leftGutterX > 0 ? .btTextPrimary : .btTextMuted)
+                }
+
+                Spacer()
+
+                // Right gutter status
+                HStack(spacing: BTSpacing.xs) {
+                    Image(systemName: rightGutterX > 0 ? "checkmark.circle.fill" : "circle")
+                        .foregroundColor(rightGutterX > 0 ? .btSuccess : .btTextMuted)
+
+                    Text("Right: \(rightGutterX > 0 ? "X = \(Int(rightGutterX)) px" : "NOT SET")")
+                        .font(BTFont.caption())
+                        .foregroundColor(rightGutterX > 0 ? .btTextPrimary : .btTextMuted)
+                }
+
+                Spacer()
+
+                // Redo button
+                if leftGutterX > 0 || rightGutterX > 0 {
+                    Button("Redo") {
+                        leftGutterX = 0
+                        rightGutterX = 0
+                        leftGutterTapPoint = nil
+                        rightGutterTapPoint = nil
+                        gutterTapState = .waitingForLeft
+                    }
+                    .font(BTFont.label())
+                    .foregroundColor(.btPrimary)
+                }
+            }
+
+            // Lane width indicator (when both set)
+            if leftGutterX > 0 && rightGutterX > 0 {
+                HStack {
+                    Image(systemName: "ruler")
+                        .foregroundColor(.btPrimary)
+
+                    Text("Lane width: \(Int(rightGutterX - leftGutterX)) px")
+                        .font(BTFont.caption())
+                        .foregroundColor(.btTextSecondary)
+
+                    Text("(\(String(format: "%.1f", calculatedPixelsPerBoard)) px/board)")
+                        .font(BTFont.captionSmall())
+                        .foregroundColor(.btTextMuted)
+                }
+            }
+        }
+        .padding(BTSpacing.md)
+        .background(Color.btSurface)
+        .cornerRadius(10)
+    }
+
+    // MARK: - Step 5: Arrows
 
     private var arrowsStep: some View {
         GeometryReader { outerGeometry in
@@ -559,8 +983,6 @@ struct CalibrationView: View {
                                             arrow1Position = location
                                         } else if arrow2Position == nil {
                                             arrow2Position = location
-                                            // Calculate estimated gutter positions
-                                            calculateGutterPositions(previewWidth: geometry.size.width)
                                         }
                                         previewSize = geometry.size
                                     }
@@ -710,28 +1132,7 @@ struct CalibrationView: View {
             .position(x: position.x, y: position.y + 22)
     }
 
-    /// Calculate estimated gutter positions based on arrow placements
-    private func calculateGutterPositions(previewWidth: CGFloat) {
-        guard let p1 = arrow1Position, let p2 = arrow2Position else { return }
-
-        let ppb = calculatedPixelsPerBoard
-        guard ppb > 0 else { return }
-
-        // Find leftmost arrow
-        let leftArrow = p1.x < p2.x ? (pos: p1, board: arrow1Board) : (pos: p2, board: arrow2Board)
-        let rightArrow = p1.x >= p2.x ? (pos: p1, board: arrow1Board) : (pos: p2, board: arrow2Board)
-
-        // Board 1 is the left gutter, Board 39 is the right gutter
-        // Calculate how many boards from leftmost arrow to left gutter (board 1)
-        let boardsToLeftGutter = Double(leftArrow.board - 1)
-        leftGutterX = leftArrow.pos.x - (boardsToLeftGutter * ppb)
-
-        // Calculate how many boards from rightmost arrow to right gutter (board 39)
-        let boardsToRightGutter = Double(39 - rightArrow.board)
-        rightGutterX = rightArrow.pos.x + (boardsToRightGutter * ppb)
-    }
-
-    // MARK: - Step 4: Verify
+    // MARK: - Step 6: Verify
 
     private var verifyStep: some View {
         GeometryReader { outerGeometry in
@@ -801,12 +1202,30 @@ struct CalibrationView: View {
                             }
                         }
 
-                        // Pins line (60ft)
-                        if let foulY = foulLineY, calculatedPixelsPerFoot > 0 {
+                        // Pin deck / Pins line (60ft)
+                        // Use actual pin deck position if set, otherwise estimate
+                        if let pinY = pinDeckY {
+                            // Actual pin deck position from calibration
+                            HStack(spacing: 4) {
+                                Text("60ft")
+                                    .font(BTFont.captionSmall())
+                                    .foregroundColor(.btAccent)
+
+                                Image(systemName: "triangle.fill")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.btAccent)
+
+                                Rectangle()
+                                    .fill(Color.btAccent)
+                                    .frame(height: 2)
+                            }
+                            .position(x: geometry.size.width / 2, y: pinY)
+                        } else if let foulY = foulLineY, calculatedPixelsPerFoot > 0 {
+                            // Estimated position
                             let pinsY = foulY - (60 * calculatedPixelsPerFoot)
                             if pinsY > 0 {
                                 HStack(spacing: 4) {
-                                    Text("60ft")
+                                    Text("60ft (est)")
                                         .font(BTFont.captionSmall())
                                         .foregroundColor(.btTextMuted)
 
@@ -820,6 +1239,20 @@ struct CalibrationView: View {
                                 }
                                 .position(x: geometry.size.width / 2, y: CGFloat(pinsY))
                             }
+                        }
+
+                        // Gutter lines (vertical)
+                        if leftGutterX > 0 {
+                            Rectangle()
+                                .fill(Color.btSuccess.opacity(0.5))
+                                .frame(width: 2)
+                                .position(x: leftGutterX, y: geometry.size.height / 2)
+                        }
+                        if rightGutterX > 0 {
+                            Rectangle()
+                                .fill(Color.btSuccess.opacity(0.5))
+                                .frame(width: 2)
+                                .position(x: rightGutterX, y: geometry.size.height / 2)
                         }
 
                         // Board lines (every 5 boards)
@@ -859,52 +1292,74 @@ struct CalibrationView: View {
 
     /// Compact results bar for verify step
     private var verifyResultsBar: some View {
-        HStack(spacing: BTSpacing.md) {
-            VStack(spacing: 2) {
-                Text(String(format: "%.1f", calculatedPixelsPerFoot))
-                    .font(BTFont.label())
-                    .foregroundColor(.btTextPrimary)
-                Text("px/ft")
-                    .font(BTFont.captionSmall())
-                    .foregroundColor(.btTextMuted)
+        VStack(spacing: BTSpacing.sm) {
+            HStack(spacing: BTSpacing.md) {
+                VStack(spacing: 2) {
+                    Text(String(format: "%.1f", calculatedPixelsPerFoot))
+                        .font(BTFont.label())
+                        .foregroundColor(.btTextPrimary)
+                    Text("px/ft")
+                        .font(BTFont.captionSmall())
+                        .foregroundColor(.btTextMuted)
+                }
+
+                Divider()
+                    .frame(height: 30)
+
+                VStack(spacing: 2) {
+                    Text(String(format: "%.1f", calculatedPixelsPerBoard))
+                        .font(BTFont.label())
+                        .foregroundColor(.btTextPrimary)
+                    Text("px/board")
+                        .font(BTFont.captionSmall())
+                        .foregroundColor(.btTextMuted)
+                }
+
+                Divider()
+                    .frame(height: 30)
+
+                VStack(spacing: 2) {
+                    Text(String(format: "%.0f", estimatedLaneWidthPixels))
+                        .font(BTFont.label())
+                        .foregroundColor(.btTextPrimary)
+                    Text("width px")
+                        .font(BTFont.captionSmall())
+                        .foregroundColor(.btTextMuted)
+                }
+
+                if estimatedLaneLengthPixels > 0 {
+                    Divider()
+                        .frame(height: 30)
+
+                    VStack(spacing: 2) {
+                        Text(String(format: "%.0f", estimatedLaneLengthPixels))
+                            .font(BTFont.label())
+                            .foregroundColor(.btTextPrimary)
+                        Text("length px")
+                            .font(BTFont.captionSmall())
+                            .foregroundColor(.btTextMuted)
+                    }
+                }
+
+                Spacer()
+
+                // Calibration quality indicator
+                VStack(spacing: 2) {
+                    Image(systemName: isComprehensiveCalibration ? "checkmark.seal.fill" : "checkmark.circle.fill")
+                        .foregroundColor(.btSuccess)
+                        .font(.system(size: 20))
+                    Text(isComprehensiveCalibration ? "Full" : "Basic")
+                        .font(BTFont.captionSmall())
+                        .foregroundColor(.btSuccess)
+                }
             }
-
-            Divider()
-                .frame(height: 30)
-
-            VStack(spacing: 2) {
-                Text(String(format: "%.1f", calculatedPixelsPerBoard))
-                    .font(BTFont.label())
-                    .foregroundColor(.btTextPrimary)
-                Text("px/board")
-                    .font(BTFont.captionSmall())
-                    .foregroundColor(.btTextMuted)
-            }
-
-            Divider()
-                .frame(height: 30)
-
-            VStack(spacing: 2) {
-                Text(String(format: "%.0f", estimatedLaneWidthPixels))
-                    .font(BTFont.label())
-                    .foregroundColor(.btTextPrimary)
-                Text("lane px")
-                    .font(BTFont.captionSmall())
-                    .foregroundColor(.btTextMuted)
-            }
-
-            Spacer()
-
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundColor(.btSuccess)
-                .font(.system(size: 20))
         }
         .padding(BTSpacing.md)
         .background(Color.btSurface)
         .cornerRadius(10)
     }
 
-    // MARK: - Step 5: Crop Zone
+    // MARK: - Step 7: Crop Zone
 
     private var cropZoneStep: some View {
         CropZoneStepView(
@@ -979,15 +1434,31 @@ struct CalibrationView: View {
 
                 // Summary
                 VStack(alignment: .leading, spacing: BTSpacing.sm) {
-                    Text("Calibration Summary")
-                        .font(BTFont.h4())
-                        .foregroundColor(.btTextPrimary)
+                    HStack {
+                        Text("Calibration Summary")
+                            .font(BTFont.h4())
+                            .foregroundColor(.btTextPrimary)
+
+                        Spacer()
+
+                        // Calibration quality badge
+                        HStack(spacing: 4) {
+                            Image(systemName: isComprehensiveCalibration ? "checkmark.seal.fill" : "checkmark.circle.fill")
+                            Text(isComprehensiveCalibration ? "Comprehensive" : "Basic")
+                        }
+                        .font(BTFont.captionSmall())
+                        .foregroundColor(isComprehensiveCalibration ? .btAccent : .btSuccess)
+                    }
 
                     Group {
                         SummaryRow(label: "Pixels per foot:", value: String(format: "%.1f px", calculatedPixelsPerFoot))
                         SummaryRow(label: "Pixels per board:", value: String(format: "%.1f px", calculatedPixelsPerBoard))
-                        SummaryRow(label: "Foul line position:", value: "Y = \(Int(foulLineY ?? 0)) px")
-                        SummaryRow(label: "Arrow position:", value: "Y = \(Int(arrowsY)) px")
+                        SummaryRow(label: "Lane width:", value: String(format: "%.0f px", estimatedLaneWidthPixels))
+                        SummaryRow(label: "Lane length:", value: pinDeckY != nil ? String(format: "%.0f px", estimatedLaneLengthPixels) : "Estimated")
+                        SummaryRow(label: "Foul line (0 ft):", value: "Y = \(Int(foulLineY ?? 0)) px")
+                        SummaryRow(label: "Pin deck (60 ft):", value: pinDeckY != nil ? "Y = \(Int(pinDeckY!)) px" : "Not set")
+                        SummaryRow(label: "Arrow position (15 ft):", value: "Y = \(Int(arrowsY)) px")
+                        SummaryRow(label: "Lane edges:", value: "X = \(Int(leftGutterX)) - \(Int(rightGutterX)) px")
                         SummaryRow(label: "Crop zone:", value: cropEnabled ? "Enabled (\(Int(cropRect.width * 100))% x \(Int(cropRect.height * 100))%)" : "Disabled")
                     }
                 }
@@ -1067,6 +1538,12 @@ struct CalibrationView: View {
             return true
         case .foulLine:
             return foulLineY != nil
+        case .pinDeck:
+            // Pin deck is optional - always allow proceeding
+            return true
+        case .gutters:
+            // Gutters are required - both must be set
+            return leftGutterX > 0 && rightGutterX > 0 && rightGutterX > leftGutterX
         case .arrows:
             return arrow1Position != nil && arrow2Position != nil && arrow1Board != arrow2Board
         case .verify:
@@ -1089,6 +1566,10 @@ struct CalibrationView: View {
                 currentStep = .foulLine
                 cameraManager.startSession()
             case .foulLine:
+                currentStep = .pinDeck
+            case .pinDeck:
+                currentStep = .gutters
+            case .gutters:
                 currentStep = .arrows
             case .arrows:
                 currentStep = .verify
@@ -1111,8 +1592,12 @@ struct CalibrationView: View {
             case .foulLine:
                 currentStep = .position
                 cameraManager.stopSession()
-            case .arrows:
+            case .pinDeck:
                 currentStep = .foulLine
+            case .gutters:
+                currentStep = .pinDeck
+            case .arrows:
+                currentStep = .gutters
             case .verify:
                 currentStep = .arrows
             case .cropZone:
@@ -1129,11 +1614,18 @@ struct CalibrationView: View {
         case .foulLine:
             foulLineY = nil
             foulLineTapPoint = nil
+        case .pinDeck:
+            pinDeckY = nil
+            pinDeckTapPoint = nil
+        case .gutters:
+            leftGutterX = 0
+            rightGutterX = 0
+            leftGutterTapPoint = nil
+            rightGutterTapPoint = nil
+            gutterTapState = .waitingForLeft
         case .arrows:
             arrow1Position = nil
             arrow2Position = nil
-            leftGutterX = 0
-            rightGutterX = 0
         case .verify:
             // Go back to arrows step
             currentStep = .arrows
@@ -1175,25 +1667,37 @@ struct CalibrationView: View {
         print("[DEBUG]   pixelsPerFoot: \(calculatedPixelsPerFoot)")
         print("[DEBUG]   pixelsPerBoard: \(calculatedPixelsPerBoard)")
         print("[DEBUG]   foulLineY: \(foulY)")
+        print("[DEBUG]   pinDeckY: \(String(describing: pinDeckY))")
         print("[DEBUG]   arrowsY: \(arrowsY)")
         print("[DEBUG]   leftGutterX: \(leftGutterX)")
         print("[DEBUG]   rightGutterX: \(rightGutterX)")
         print("[DEBUG]   cropEnabled: \(cropEnabled)")
         print("[DEBUG]   cropRect: \(cropRect)")
+        print("[DEBUG]   isComprehensive: \(isComprehensiveCalibration)")
 
         let profile = CalibrationProfile(
             id: UUID(),
             centerId: centerId,
             centerName: centerName.trimmingCharacters(in: .whitespacesAndNewlines),
             laneNumber: laneNum,
-            pixelsPerFoot: calculatedPixelsPerFoot,
-            pixelsPerBoard: calculatedPixelsPerBoard,
             foulLineY: Double(foulY),
-            arrowsY: arrowsY,
+            pinDeckY: pinDeckY.map { Double($0) },
             leftGutterX: Double(leftGutterX),
             rightGutterX: Double(rightGutterX),
+            arrowsY: arrowsY,
+            arrowPositions: nil,  // Could be added in future for individual arrow tracking
+            pixelsPerFoot: calculatedPixelsPerFoot,
+            pixelsPerBoard: calculatedPixelsPerBoard,
+            breakpointStartY: nil,  // Auto-calculated if needed
+            breakpointEndY: nil,
+            ballReturnLeftX: nil,
+            ballReturnRightX: nil,
+            cameraHeightFt: nil,
+            cameraAngleDeg: nil,
             cropRect: cropEnabled ? cropRect : nil,
             cropEnabled: cropEnabled,
+            calibrationConfidence: isComprehensiveCalibration ? 0.9 : 0.7,
+            autoDetectedPoints: nil,
             createdAt: Date(),
             lastUsed: Date()
         )

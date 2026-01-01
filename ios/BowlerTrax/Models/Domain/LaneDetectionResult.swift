@@ -12,7 +12,7 @@ import CoreGraphics
 // MARK: - Lane Detection Result
 
 /// Result of lane detection analysis from camera frames
-struct LaneDetectionResult: Sendable, Equatable {
+struct LaneDetectionResult: Sendable {
     // MARK: - Detected Features
 
     /// Left lane edge/gutter line points (in normalized coordinates 0-1)
@@ -24,8 +24,14 @@ struct LaneDetectionResult: Sendable, Equatable {
     /// Foul line endpoints (in normalized coordinates 0-1)
     var foulLine: LineSeg?
 
+    /// Pin deck / pinsetter entrance line (in normalized coordinates 0-1)
+    var pinDeckLine: LineSeg?
+
     /// Detected arrow positions
     var arrowPositions: [ArrowDetection]?
+
+    /// Breakpoint zone (where ball typically hooks) - approximately 35-45 ft
+    var breakpointZone: (start: CGFloat, end: CGFloat)?
 
     /// Overall detection confidence (0-1)
     var confidence: Double
@@ -49,6 +55,11 @@ struct LaneDetectionResult: Sendable, Equatable {
         (arrowPositions?.count ?? 0) >= 2
     }
 
+    /// Whether detection is comprehensive (includes pin deck)
+    var isComprehensive: Bool {
+        isComplete && pinDeckLine != nil
+    }
+
     /// Whether detection has minimum usable data
     var isUsable: Bool {
         foulLine != nil && confidence >= 0.5
@@ -66,13 +77,31 @@ struct LaneDetectionResult: Sendable, Equatable {
         return Double(abs(right.x - left.x))
     }
 
+    /// Estimated lane length (foul line to pin deck) in normalized coordinates
+    var estimatedLaneLength: Double? {
+        guard let foul = foulLine, let pinDeck = pinDeckLine else { return nil }
+        return Double(abs(foul.midpoint.y - pinDeck.midpoint.y))
+    }
+
+    /// Pin deck Y position (normalized)
+    var pinDeckY: CGFloat? {
+        pinDeckLine?.midpoint.y
+    }
+
+    /// Foul line Y position (normalized)
+    var foulLineY: CGFloat? {
+        foulLine?.midpoint.y
+    }
+
     // MARK: - Initialization
 
     init(
         leftGutterLine: [CGPoint]? = nil,
         rightGutterLine: [CGPoint]? = nil,
         foulLine: LineSeg? = nil,
+        pinDeckLine: LineSeg? = nil,
         arrowPositions: [ArrowDetection]? = nil,
+        breakpointZone: (start: CGFloat, end: CGFloat)? = nil,
         confidence: Double = 0,
         laneRectangle: CGRect? = nil,
         vanishingPoint: CGPoint? = nil,
@@ -81,7 +110,9 @@ struct LaneDetectionResult: Sendable, Equatable {
         self.leftGutterLine = leftGutterLine
         self.rightGutterLine = rightGutterLine
         self.foulLine = foulLine
+        self.pinDeckLine = pinDeckLine
         self.arrowPositions = arrowPositions
+        self.breakpointZone = breakpointZone
         self.confidence = confidence
         self.laneRectangle = laneRectangle
         self.vanishingPoint = vanishingPoint
@@ -112,6 +143,13 @@ struct LaneDetectionResult: Sendable, Equatable {
             )
         }
 
+        if let pinDeck = pinDeckLine {
+            result.pinDeckLine = LineSeg(
+                start: CGPoint(x: pinDeck.start.x * width, y: pinDeck.start.y * height),
+                end: CGPoint(x: pinDeck.end.x * width, y: pinDeck.end.y * height)
+            )
+        }
+
         result.arrowPositions = arrowPositions?.map { arrow in
             var newArrow = arrow
             newArrow.position = CGPoint(
@@ -119,6 +157,10 @@ struct LaneDetectionResult: Sendable, Equatable {
                 y: arrow.position.y * height
             )
             return newArrow
+        }
+
+        if let zone = breakpointZone {
+            result.breakpointZone = (start: zone.start * height, end: zone.end * height)
         }
 
         if let rect = laneRectangle {
@@ -378,4 +420,35 @@ struct LaneDetectionConfiguration: Sendable {
         detectArrows: true,
         arrowSensitivity: 0.4
     )
+}
+
+// MARK: - LaneDetectionResult Equatable
+
+extension LaneDetectionResult: Equatable {
+    static func == (lhs: LaneDetectionResult, rhs: LaneDetectionResult) -> Bool {
+        lhs.leftGutterLine == rhs.leftGutterLine &&
+        lhs.rightGutterLine == rhs.rightGutterLine &&
+        lhs.foulLine == rhs.foulLine &&
+        lhs.pinDeckLine == rhs.pinDeckLine &&
+        lhs.arrowPositions == rhs.arrowPositions &&
+        lhs.confidence == rhs.confidence &&
+        lhs.laneRectangle == rhs.laneRectangle &&
+        lhs.vanishingPoint == rhs.vanishingPoint &&
+        lhs.timestamp == rhs.timestamp &&
+        compareBreakpointZones(lhs.breakpointZone, rhs.breakpointZone)
+    }
+
+    private static func compareBreakpointZones(
+        _ lhs: (start: CGFloat, end: CGFloat)?,
+        _ rhs: (start: CGFloat, end: CGFloat)?
+    ) -> Bool {
+        switch (lhs, rhs) {
+        case (nil, nil):
+            return true
+        case let (l?, r?):
+            return l.start == r.start && l.end == r.end
+        default:
+            return false
+        }
+    }
 }
