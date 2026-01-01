@@ -1,0 +1,2 @@
+# This directory stores hook logs
+# - build-history.log: Record of all xcodebuild completions

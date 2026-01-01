@@ -1,0 +1,832 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1544B009BAEAAEAEFB34F9B1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155F2C41AA3686DDBC62CFD8 /* SettingsView.swift */; };
+		1F51E7B3C7C440612B650D3A /* MetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35123FC36F422C871144332C /* MetricCard.swift */; };
+		23168CF758C9091A372232E3 /* ShotEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C5A18F2F64918CB5E9DE29 /* ShotEntity.swift */; };
+		298D2D6F48AF094082A7E6DE /* BallCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E866802FF3604BED0A852A /* BallCatalogService.swift */; };
+		2D6FFFF098AD3E793869A76F /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9010F978B9C361E11E47C2DD /* SessionDetailView.swift */; };
+		312AE09743F59674D46977F8 /* TrajectoryPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EFE273306A17393DBB22AF /* TrajectoryPathView.swift */; };
+		32D355B6D77491E102A1FF00 /* CalibrationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9451F526F1782D1670C39C /* CalibrationEntity.swift */; };
+		33B0E0648268C8E93F423449 /* BallDatabase.json in Resources */ = {isa = PBXBuildFile; fileRef = 389FED5DB2F48021DE1616CF /* BallDatabase.json */; };
+		364DD7E17EA4F198B638CAEA /* BallProfileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A6C195706406CC556B2022 /* BallProfileEntity.swift */; };
+		390023634B1C382E0CD97FF4 /* BowlerTraxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D988F4457686D6F9B18A46D0 /* BowlerTraxApp.swift */; };
+		3962F402FE87A90219498F18 /* SessionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D1EC026AF11FA1FF7B0A90 /* SessionCard.swift */; };
+		3B9D57096C3F46E5377AA614 /* BallPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D59DDDB2C09449389F06812 /* BallPickerView.swift */; };
+		3DEE2D867EE5B4159B489548 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B852DB00E0D74283294F96 /* Spacing.swift */; };
+		40480A0A4C688EE6F68E48DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422D6FCB5D63815656ADB2F9 /* Assets.xcassets */; };
+		4632389610A441FFB96572F9 /* LaneDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDCC3A1267EFB5B8574659E /* LaneDetector.swift */; };
+		4F2A8824BB98D44091AF843B /* LaneCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DFF97557E9AE575C61488 /* LaneCanvas.swift */; };
+		500364AF586CF70DD5F37869 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06F06E25023AE9EAFC5D8EC /* ContentView.swift */; };
+		52F3E85032C48A300951E215 /* CalibrationProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0A91995678EA90EDBB83E5 /* CalibrationProfile.swift */; };
+		54E1BD4E16C5CF9825E8C3C6 /* Shot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917FEBB98870C0AF824A5243 /* Shot.swift */; };
+		5605A1BFF72D65092A9BB4CB /* DataSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BE254FD9FB3CE34D7F7187 /* DataSchema.swift */; };
+		5AD3936ED6CFD763192A8447 /* BallCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE7C78015A991DCFB2ECB59 /* BallCatalog.swift */; };
+		60ED5FD00543BC51B17AFD64 /* SessionLaneVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E27C164531173406D4FACD9 /* SessionLaneVisualizer.swift */; };
+		62A6848F354A71D9ADDBD624 /* SessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C248F341887AEA598985B1 /* SessionListView.swift */; };
+		645B33A119B82F78DB421706 /* TrajectoryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D16CF1560CFC3B5CDE374BF /* TrajectoryPoint.swift */; };
+		669AC26D38D59DBFE88DBC04 /* OilPatternService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8CDB012A1A971BC604FA8A /* OilPatternService.swift */; };
+		698D7A536B0EBFE11AFF47BD /* BTNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA939E91A38679A90F1AB5 /* BTNavigationBar.swift */; };
+		6A696C26C8515477E1747672 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC1F3EE6FE9E03A900CA99B /* CameraPreviewView.swift */; };
+		7FCDF5783C3F779A0C7F8043 /* BallDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF268B9B747CE734F9E4606E /* BallDetection.swift */; };
+		8360B0C336ED682D4FF15DC9 /* OilPatterns.json in Resources */ = {isa = PBXBuildFile; fileRef = FB3E34A787D5618EDDF3612F /* OilPatterns.json */; };
+		8BA801D1F9F94BC6180CE82D /* OilPatternEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D5F647221DB7ED930A4A0 /* OilPatternEntity.swift */; };
+		8D41AEC2A538F901060C03FE /* ShotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4BBD4EB39EB958AC8FD26 /* ShotCard.swift */; };
+		9427068A81527D9991F286BD /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673ED944ADCEE55BDCADCBD5 /* Typography.swift */; };
+		970B4B36131AC2219B969FD5 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7CFC8939230DD2F50E42B1B /* CameraPermissionManager.swift */; };
+		99FB3FD2A5B1FE21657E7F4B /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F459F247C4F7C3210D906F75 /* Session.swift */; };
+		9B290EC4C36FE2F280E9826D /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B939F8CC9904EC8C585BAC /* RecordingView.swift */; };
+		9FA102CA634C4A0F881E3EE7 /* MetricsOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238063E6DD11F38CC62B8058 /* MetricsOverlay.swift */; };
+		A172FB83443418B329E574FF /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F59515EF0E7411F7C7D2E47 /* DashboardView.swift */; };
+		A26CEE8ABD9B1CA2A78DE629 /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8BA449DF257B515035BA6A /* CalibrationView.swift */; };
+		A3BE66076ADA4675692DD337 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE6CA3014C0910430EA7FD /* Animation.swift */; };
+		A69D388C1987BD6B9B5E0D16 /* ShotComparisonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFAE09E6A29962430740446 /* ShotComparisonView.swift */; };
+		AF410330249ED441F1E2EC0A /* BallProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5543C0912B8CD2A876A0A15F /* BallProfile.swift */; };
+		AFE85DD741B78A61D973D710 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03860249604E9185DA25296 /* UserSettings.swift */; };
+		B66B18BDA869417992B4FE1B /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3614D4D3A58F8BDD5F20C /* Colors.swift */; };
+		BBC60FE36294BAF7B5C036F0 /* LaneVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0A69CC6611B95EF5908AFF /* LaneVisualizer.swift */; };
+		BD807EB28AF6DF1819CAE020 /* LaneOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABAA90C8D30BA1F52FEB742 /* LaneOverlayView.swift */; };
+		C6196C6B26000CC790046BE6 /* Center.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3A5F8DC5D1F0ECA2CFB54F /* Center.swift */; };
+		CA001000001 /* FrameProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA001000101 /* FrameProcessor.swift */; };
+		CBCB8D0B6A6AFD625479F724 /* StrikeProbabilityGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5C830119EFEE4FB782AB7B /* StrikeProbabilityGauge.swift */; };
+		CV001000001 /* ColorMaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000101 /* ColorMaskGenerator.swift */; };
+		CV001000002 /* ContourDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000102 /* ContourDetector.swift */; };
+		CV001000003 /* BallDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000103 /* BallDetector.swift */; };
+		CV001000004 /* KalmanFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000104 /* KalmanFilter.swift */; };
+		CV001000005 /* TrajectoryTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000105 /* TrajectoryTracker.swift */; };
+		CV001000006 /* RevRateCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000106 /* RevRateCalculator.swift */; };
+		CV001000007 /* CVErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV001000107 /* CVErrors.swift */; };
+		CZ001000001 /* CropZoneEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CZ001000101 /* CropZoneEditor.swift */; };
+		D69B12B907C39BFCEC7230A2 /* OilPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E8F0E05FE3D05BD704D8B9 /* OilPattern.swift */; };
+		DEB3842CDA2F6540B19981CC /* CenterEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A93F9519681FE0DACC6B5F5 /* CenterEntity.swift */; };
+		E34F94CB96ED6AE2BE3153E9 /* LaneDetectionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DF8F6CAB1A886DCECC35D5 /* LaneDetectionResult.swift */; };
+		E7F83DB6CA0558FD57E2E333 /* SessionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF4B1321361F9D371352321 /* SessionEntity.swift */; };
+		E9B96003E70FC3F480C83F25 /* BTTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5704FC27E8D7798EA8D147E4 /* BTTabBar.swift */; };
+		F11F535D0406720D4B48A9B8 /* CameraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BF71FF59632588498B988A /* CameraSessionManager.swift */; };
+		F79214CD8E00A90D50B15E07 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3D4980B455C95C4AC1AE9 /* Types.swift */; };
+		FF5F744F0166929C117556C6 /* BTActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3138EB459EDBE2FE08B8FDC4 /* BTActionButton.swift */; };
+		PH001000001 /* SpeedCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = PH001000101 /* SpeedCalculator.swift */; };
+		PH001000002 /* AngleCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = PH001000102 /* AngleCalculator.swift */; };
+		PH001000003 /* StrikeProbability.swift in Sources */ = {isa = PBXBuildFile; fileRef = PH001000103 /* StrikeProbability.swift */; };
+		SHOTLOG001 /* ShotLogCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHOTLOG002 /* ShotLogCard.swift */; };
+		SHOTLV001 /* ShotLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHOTLV002 /* ShotLogView.swift */; };
+		SHOTPOP001 /* ShotPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHOTPOP002 /* ShotPopup.swift */; };
+		ST001000001 /* RecordingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ST001000101 /* RecordingStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03E8F0E05FE3D05BD704D8B9 /* OilPattern.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OilPattern.swift; sourceTree = "<group>"; };
+		0E0A69CC6611B95EF5908AFF /* LaneVisualizer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaneVisualizer.swift; sourceTree = "<group>"; };
+		0EDCC3A1267EFB5B8574659E /* LaneDetector.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaneDetector.swift; sourceTree = "<group>"; };
+		0FDA939E91A38679A90F1AB5 /* BTNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTNavigationBar.swift; sourceTree = "<group>"; };
+		14B852DB00E0D74283294F96 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		155F2C41AA3686DDBC62CFD8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1852D5420CAAEEB3B2B87080 /* BowlerTrax.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BowlerTrax.entitlements; sourceTree = "<group>"; };
+		238063E6DD11F38CC62B8058 /* MetricsOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsOverlay.swift; sourceTree = "<group>"; };
+		26C248F341887AEA598985B1 /* SessionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListView.swift; sourceTree = "<group>"; };
+		2A0D5F647221DB7ED930A4A0 /* OilPatternEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OilPatternEntity.swift; sourceTree = "<group>"; };
+		2BFAE09E6A29962430740446 /* ShotComparisonView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotComparisonView.swift; sourceTree = "<group>"; };
+		2E27C164531173406D4FACD9 /* SessionLaneVisualizer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SessionLaneVisualizer.swift; sourceTree = "<group>"; };
+		3138EB459EDBE2FE08B8FDC4 /* BTActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTActionButton.swift; sourceTree = "<group>"; };
+		35123FC36F422C871144332C /* MetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCard.swift; sourceTree = "<group>"; };
+		374DD552D7980CA6EB962369 /* BowlerTrax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BowlerTrax.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		389FED5DB2F48021DE1616CF /* BallDatabase.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BallDatabase.json; sourceTree = "<group>"; };
+		3A93F9519681FE0DACC6B5F5 /* CenterEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterEntity.swift; sourceTree = "<group>"; };
+		3D16CF1560CFC3B5CDE374BF /* TrajectoryPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryPoint.swift; sourceTree = "<group>"; };
+		3F3A5F8DC5D1F0ECA2CFB54F /* Center.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Center.swift; sourceTree = "<group>"; };
+		422D6FCB5D63815656ADB2F9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4A0A91995678EA90EDBB83E5 /* CalibrationProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationProfile.swift; sourceTree = "<group>"; };
+		4B5C830119EFEE4FB782AB7B /* StrikeProbabilityGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrikeProbabilityGauge.swift; sourceTree = "<group>"; };
+		4F59515EF0E7411F7C7D2E47 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		5543C0912B8CD2A876A0A15F /* BallProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallProfile.swift; sourceTree = "<group>"; };
+		5704FC27E8D7798EA8D147E4 /* BTTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTTabBar.swift; sourceTree = "<group>"; };
+		58BF71FF59632588498B988A /* CameraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionManager.swift; sourceTree = "<group>"; };
+		673ED944ADCEE55BDCADCBD5 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		796FCD2D673BB5C1E41C3599 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7DD3614D4D3A58F8BDD5F20C /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		7DF4B1321361F9D371352321 /* SessionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEntity.swift; sourceTree = "<group>"; };
+		82EFE273306A17393DBB22AF /* TrajectoryPathView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TrajectoryPathView.swift; sourceTree = "<group>"; };
+		83A6C195706406CC556B2022 /* BallProfileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallProfileEntity.swift; sourceTree = "<group>"; };
+		9010F978B9C361E11E47C2DD /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+		917FEBB98870C0AF824A5243 /* Shot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shot.swift; sourceTree = "<group>"; };
+		9ABAA90C8D30BA1F52FEB742 /* LaneOverlayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaneOverlayView.swift; sourceTree = "<group>"; };
+		9D59DDDB2C09449389F06812 /* BallPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallPickerView.swift; sourceTree = "<group>"; };
+		9E8BA449DF257B515035BA6A /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
+		A1F3D4980B455C95C4AC1AE9 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		A2BE254FD9FB3CE34D7F7187 /* DataSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSchema.swift; sourceTree = "<group>"; };
+		A8B939F8CC9904EC8C585BAC /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		AFC1F3EE6FE9E03A900CA99B /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		B0BE6CA3014C0910430EA7FD /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
+		B2E866802FF3604BED0A852A /* BallCatalogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallCatalogService.swift; sourceTree = "<group>"; };
+		B7CFC8939230DD2F50E42B1B /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
+		B9D1EC026AF11FA1FF7B0A90 /* SessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCard.swift; sourceTree = "<group>"; };
+		BF268B9B747CE734F9E4606E /* BallDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallDetection.swift; sourceTree = "<group>"; };
+		BF8CDB012A1A971BC604FA8A /* OilPatternService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OilPatternService.swift; sourceTree = "<group>"; };
+		BF9451F526F1782D1670C39C /* CalibrationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationEntity.swift; sourceTree = "<group>"; };
+		CA001000101 /* FrameProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameProcessor.swift; sourceTree = "<group>"; };
+		CV001000101 /* ColorMaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMaskGenerator.swift; sourceTree = "<group>"; };
+		CV001000102 /* ContourDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContourDetector.swift; sourceTree = "<group>"; };
+		CV001000103 /* BallDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallDetector.swift; sourceTree = "<group>"; };
+		CV001000104 /* KalmanFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KalmanFilter.swift; sourceTree = "<group>"; };
+		CV001000105 /* TrajectoryTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryTracker.swift; sourceTree = "<group>"; };
+		CV001000106 /* RevRateCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevRateCalculator.swift; sourceTree = "<group>"; };
+		CV001000107 /* CVErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVErrors.swift; sourceTree = "<group>"; };
+		CZ001000101 /* CropZoneEditor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CropZoneEditor.swift; sourceTree = "<group>"; };
+		D1F4BBD4EB39EB958AC8FD26 /* ShotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotCard.swift; sourceTree = "<group>"; };
+		D988F4457686D6F9B18A46D0 /* BowlerTraxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowlerTraxApp.swift; sourceTree = "<group>"; };
+		DEE7C78015A991DCFB2ECB59 /* BallCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallCatalog.swift; sourceTree = "<group>"; };
+		E06F06E25023AE9EAFC5D8EC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E6C5A18F2F64918CB5E9DE29 /* ShotEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEntity.swift; sourceTree = "<group>"; };
+		E9DF8F6CAB1A886DCECC35D5 /* LaneDetectionResult.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaneDetectionResult.swift; sourceTree = "<group>"; };
+		F03860249604E9185DA25296 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		F38DFF97557E9AE575C61488 /* LaneCanvas.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaneCanvas.swift; sourceTree = "<group>"; };
+		F459F247C4F7C3210D906F75 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		FB3E34A787D5618EDDF3612F /* OilPatterns.json */ = {isa = PBXFileReference; includeInIndex = 1; path = OilPatterns.json; sourceTree = "<group>"; };
+		PH001000101 /* SpeedCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedCalculator.swift; sourceTree = "<group>"; };
+		PH001000102 /* AngleCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleCalculator.swift; sourceTree = "<group>"; };
+		PH001000103 /* StrikeProbability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrikeProbability.swift; sourceTree = "<group>"; };
+		SHOTLOG002 /* ShotLogCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotLogCard.swift; sourceTree = "<group>"; };
+		SHOTLV002 /* ShotLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotLogView.swift; sourceTree = "<group>"; };
+		SHOTPOP002 /* ShotPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotPopup.swift; sourceTree = "<group>"; };
+		ST001000101 /* RecordingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingStore.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		02C239C060A203F7B677C117 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				83A6C195706406CC556B2022 /* BallProfileEntity.swift */,
+				BF9451F526F1782D1670C39C /* CalibrationEntity.swift */,
+				3A93F9519681FE0DACC6B5F5 /* CenterEntity.swift */,
+				A2BE254FD9FB3CE34D7F7187 /* DataSchema.swift */,
+				7DF4B1321361F9D371352321 /* SessionEntity.swift */,
+				E6C5A18F2F64918CB5E9DE29 /* ShotEntity.swift */,
+				2A0D5F647221DB7ED930A4A0 /* OilPatternEntity.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		07AB28E490EEAF8737514058 /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				4EA814E8CB2A98948FC402B7 /* Components */,
+				A8B939F8CC9904EC8C585BAC /* RecordingView.swift */,
+			);
+			path = Recording;
+			sourceTree = "<group>";
+		};
+		0A92F67145CC81873B01B0C2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		11C25983B8A779E5EE5F1AF6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D988F4457686D6F9B18A46D0 /* BowlerTraxApp.swift */,
+				E06F06E25023AE9EAFC5D8EC /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		189AC5D38B9E55465B96110C /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				DEE7C78015A991DCFB2ECB59 /* BallCatalog.swift */,
+				BF268B9B747CE734F9E4606E /* BallDetection.swift */,
+				5543C0912B8CD2A876A0A15F /* BallProfile.swift */,
+				4A0A91995678EA90EDBB83E5 /* CalibrationProfile.swift */,
+				3F3A5F8DC5D1F0ECA2CFB54F /* Center.swift */,
+				F459F247C4F7C3210D906F75 /* Session.swift */,
+				917FEBB98870C0AF824A5243 /* Shot.swift */,
+				3D16CF1560CFC3B5CDE374BF /* TrajectoryPoint.swift */,
+				A1F3D4980B455C95C4AC1AE9 /* Types.swift */,
+				F03860249604E9185DA25296 /* UserSettings.swift */,
+				E9DF8F6CAB1A886DCECC35D5 /* LaneDetectionResult.swift */,
+				03E8F0E05FE3D05BD704D8B9 /* OilPattern.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		2AAB49DD7216C51A76439084 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				3138EB459EDBE2FE08B8FDC4 /* BTActionButton.swift */,
+				0FDA939E91A38679A90F1AB5 /* BTNavigationBar.swift */,
+				5704FC27E8D7798EA8D147E4 /* BTTabBar.swift */,
+				35123FC36F422C871144332C /* MetricCard.swift */,
+				B9D1EC026AF11FA1FF7B0A90 /* SessionCard.swift */,
+				D1F4BBD4EB39EB958AC8FD26 /* ShotCard.swift */,
+				4B5C830119EFEE4FB782AB7B /* StrikeProbabilityGauge.swift */,
+				F38DFF97557E9AE575C61488 /* LaneCanvas.swift */,
+				0E0A69CC6611B95EF5908AFF /* LaneVisualizer.swift */,
+				82EFE273306A17393DBB22AF /* TrajectoryPathView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		3F3DD5B8F5C6C7EE2D2D4839 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				2AAB49DD7216C51A76439084 /* Components */,
+				B0BE6CA3014C0910430EA7FD /* Animation.swift */,
+				7DD3614D4D3A58F8BDD5F20C /* Colors.swift */,
+				14B852DB00E0D74283294F96 /* Spacing.swift */,
+				673ED944ADCEE55BDCADCBD5 /* Typography.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		44548C19449F6097E4A14095 = {
+			isa = PBXGroup;
+			children = (
+				D96B8D04C4354A10AB5E1DA6 /* BowlerTrax */,
+				6BF639401C5D69992D059A75 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4E240269ADDAD2CC10885B96 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		4EA814E8CB2A98948FC402B7 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				238063E6DD11F38CC62B8058 /* MetricsOverlay.swift */,
+				SHOTPOP002 /* ShotPopup.swift */,
+				SHOTLOG002 /* ShotLogCard.swift */,
+				SHOTLV002 /* ShotLogView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		4EFCCDF6A36F8FB779B364D8 /* Physics */ = {
+			isa = PBXGroup;
+			children = (
+				PH001000102 /* AngleCalculator.swift */,
+				PH001000101 /* SpeedCalculator.swift */,
+				PH001000103 /* StrikeProbability.swift */,
+			);
+			path = Physics;
+			sourceTree = "<group>";
+		};
+		5DD95C09DC1907CC17B5F854 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				4F59515EF0E7411F7C7D2E47 /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		6BF639401C5D69992D059A75 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				374DD552D7980CA6EB962369 /* BowlerTrax.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7290CCDFCFE59D9B8AC1160C /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				B7CFC8939230DD2F50E42B1B /* CameraPermissionManager.swift */,
+				AFC1F3EE6FE9E03A900CA99B /* CameraPreviewView.swift */,
+				58BF71FF59632588498B988A /* CameraSessionManager.swift */,
+				CA001000101 /* FrameProcessor.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		86CA6B5B0C17449FEA1623B5 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				B5E537319CE9EECDD40F88E6 /* Calibration */,
+				5DD95C09DC1907CC17B5F854 /* Dashboard */,
+				4E240269ADDAD2CC10885B96 /* Onboarding */,
+				07AB28E490EEAF8737514058 /* Recording */,
+				9F98A7B68012C514545AFB23 /* Sessions */,
+				BC10425DEC32C430ACD4ADA5 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		8D472EBDE8273808CD414F70 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				EB91F5DD79F8011B605E3335 /* Calibration */,
+				7290CCDFCFE59D9B8AC1160C /* Camera */,
+				BEA76CFEB47D8D427EE6B779 /* CV */,
+				4EFCCDF6A36F8FB779B364D8 /* Physics */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		9F98A7B68012C514545AFB23 /* Sessions */ = {
+			isa = PBXGroup;
+			children = (
+				9010F978B9C361E11E47C2DD /* SessionDetailView.swift */,
+				26C248F341887AEA598985B1 /* SessionListView.swift */,
+				B1AA370F0F8178F87CD9B3F9 /* Components */,
+			);
+			path = Sessions;
+			sourceTree = "<group>";
+		};
+		AD1C532CACD6331308E37788 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				0A92F67145CC81873B01B0C2 /* Extensions */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B0B8DA294ECA7789D3544AC9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B2E866802FF3604BED0A852A /* BallCatalogService.swift */,
+				BF8CDB012A1A971BC604FA8A /* OilPatternService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B1AA370F0F8178F87CD9B3F9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2E27C164531173406D4FACD9 /* SessionLaneVisualizer.swift */,
+				2BFAE09E6A29962430740446 /* ShotComparisonView.swift */,
+			);
+			name = Components;
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B5E537319CE9EECDD40F88E6 /* Calibration */ = {
+			isa = PBXGroup;
+			children = (
+				9E8BA449DF257B515035BA6A /* CalibrationView.swift */,
+				F2EEF8F35D031383131C1EBF /* Components */,
+			);
+			path = Calibration;
+			sourceTree = "<group>";
+		};
+		BC10425DEC32C430ACD4ADA5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				9D59DDDB2C09449389F06812 /* BallPickerView.swift */,
+				155F2C41AA3686DDBC62CFD8 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		BEA76CFEB47D8D427EE6B779 /* CV */ = {
+			isa = PBXGroup;
+			children = (
+				CV001000103 /* BallDetector.swift */,
+				CV001000101 /* ColorMaskGenerator.swift */,
+				CV001000102 /* ContourDetector.swift */,
+				CV001000107 /* CVErrors.swift */,
+				CV001000104 /* KalmanFilter.swift */,
+				CV001000106 /* RevRateCalculator.swift */,
+				CV001000105 /* TrajectoryTracker.swift */,
+				0EDCC3A1267EFB5B8574659E /* LaneDetector.swift */,
+			);
+			path = CV;
+			sourceTree = "<group>";
+		};
+		BFF06B499788604AB9F4479D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				189AC5D38B9E55465B96110C /* Domain */,
+				02C239C060A203F7B677C117 /* Persistence */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D96B8D04C4354A10AB5E1DA6 /* BowlerTrax */ = {
+			isa = PBXGroup;
+			children = (
+				11C25983B8A779E5EE5F1AF6 /* App */,
+				8D472EBDE8273808CD414F70 /* Core */,
+				3F3DD5B8F5C6C7EE2D2D4839 /* DesignSystem */,
+				86CA6B5B0C17449FEA1623B5 /* Features */,
+				BFF06B499788604AB9F4479D /* Models */,
+				DD65B845573D30021505B80A /* Resources */,
+				B0B8DA294ECA7789D3544AC9 /* Services */,
+				E39C0A0A003A4D0AB038C11F /* Stores */,
+				AD1C532CACD6331308E37788 /* Utilities */,
+				1852D5420CAAEEB3B2B87080 /* BowlerTrax.entitlements */,
+				796FCD2D673BB5C1E41C3599 /* Info.plist */,
+			);
+			path = BowlerTrax;
+			sourceTree = "<group>";
+		};
+		DD65B845573D30021505B80A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				422D6FCB5D63815656ADB2F9 /* Assets.xcassets */,
+				389FED5DB2F48021DE1616CF /* BallDatabase.json */,
+				FB3E34A787D5618EDDF3612F /* OilPatterns.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E39C0A0A003A4D0AB038C11F /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				ST001000101 /* RecordingStore.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		EB91F5DD79F8011B605E3335 /* Calibration */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Calibration;
+			sourceTree = "<group>";
+		};
+		F2EEF8F35D031383131C1EBF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CZ001000101 /* CropZoneEditor.swift */,
+				9ABAA90C8D30BA1F52FEB742 /* LaneOverlayView.swift */,
+			);
+			name = Components;
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F33212D2D5FEF5E0A7E956C6 /* BowlerTrax */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9BC38C0C09BBCBFF0BBEA578 /* Build configuration list for PBXNativeTarget "BowlerTrax" */;
+			buildPhases = (
+				A6E658AA821A26FF586E7904 /* Sources */,
+				106A41D44013BF36BA9E4B5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BowlerTrax;
+			productName = BowlerTrax;
+			productReference = 374DD552D7980CA6EB962369 /* BowlerTrax.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ADD2506B5C489CE11D105D89 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					F33212D2D5FEF5E0A7E956C6 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A88282D80212B1E072D76CF9 /* Build configuration list for PBXProject "BowlerTrax" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 44548C19449F6097E4A14095;
+			minimizedProjectReferenceProxies = 1;
+			productRefGroup = 6BF639401C5D69992D059A75 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F33212D2D5FEF5E0A7E956C6 /* BowlerTrax */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		106A41D44013BF36BA9E4B5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40480A0A4C688EE6F68E48DC /* Assets.xcassets in Resources */,
+				33B0E0648268C8E93F423449 /* BallDatabase.json in Resources */,
+				8360B0C336ED682D4FF15DC9 /* OilPatterns.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A6E658AA821A26FF586E7904 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3BE66076ADA4675692DD337 /* Animation.swift in Sources */,
+				FF5F744F0166929C117556C6 /* BTActionButton.swift in Sources */,
+				698D7A536B0EBFE11AFF47BD /* BTNavigationBar.swift in Sources */,
+				E9B96003E70FC3F480C83F25 /* BTTabBar.swift in Sources */,
+				5AD3936ED6CFD763192A8447 /* BallCatalog.swift in Sources */,
+				298D2D6F48AF094082A7E6DE /* BallCatalogService.swift in Sources */,
+				7FCDF5783C3F779A0C7F8043 /* BallDetection.swift in Sources */,
+				3B9D57096C3F46E5377AA614 /* BallPickerView.swift in Sources */,
+				AF410330249ED441F1E2EC0A /* BallProfile.swift in Sources */,
+				364DD7E17EA4F198B638CAEA /* BallProfileEntity.swift in Sources */,
+				390023634B1C382E0CD97FF4 /* BowlerTraxApp.swift in Sources */,
+				32D355B6D77491E102A1FF00 /* CalibrationEntity.swift in Sources */,
+				52F3E85032C48A300951E215 /* CalibrationProfile.swift in Sources */,
+				A26CEE8ABD9B1CA2A78DE629 /* CalibrationView.swift in Sources */,
+				970B4B36131AC2219B969FD5 /* CameraPermissionManager.swift in Sources */,
+				6A696C26C8515477E1747672 /* CameraPreviewView.swift in Sources */,
+				F11F535D0406720D4B48A9B8 /* CameraSessionManager.swift in Sources */,
+				C6196C6B26000CC790046BE6 /* Center.swift in Sources */,
+				DEB3842CDA2F6540B19981CC /* CenterEntity.swift in Sources */,
+				B66B18BDA869417992B4FE1B /* Colors.swift in Sources */,
+				500364AF586CF70DD5F37869 /* ContentView.swift in Sources */,
+				A172FB83443418B329E574FF /* DashboardView.swift in Sources */,
+				5605A1BFF72D65092A9BB4CB /* DataSchema.swift in Sources */,
+				1F51E7B3C7C440612B650D3A /* MetricCard.swift in Sources */,
+				9FA102CA634C4A0F881E3EE7 /* MetricsOverlay.swift in Sources */,
+				9B290EC4C36FE2F280E9826D /* RecordingView.swift in Sources */,
+				99FB3FD2A5B1FE21657E7F4B /* Session.swift in Sources */,
+				3962F402FE87A90219498F18 /* SessionCard.swift in Sources */,
+				2D6FFFF098AD3E793869A76F /* SessionDetailView.swift in Sources */,
+				E7F83DB6CA0558FD57E2E333 /* SessionEntity.swift in Sources */,
+				62A6848F354A71D9ADDBD624 /* SessionListView.swift in Sources */,
+				1544B009BAEAAEAEFB34F9B1 /* SettingsView.swift in Sources */,
+				54E1BD4E16C5CF9825E8C3C6 /* Shot.swift in Sources */,
+				8D41AEC2A538F901060C03FE /* ShotCard.swift in Sources */,
+				SHOTPOP001 /* ShotPopup.swift in Sources */,
+				SHOTLOG001 /* ShotLogCard.swift in Sources */,
+				SHOTLV001 /* ShotLogView.swift in Sources */,
+				23168CF758C9091A372232E3 /* ShotEntity.swift in Sources */,
+				3DEE2D867EE5B4159B489548 /* Spacing.swift in Sources */,
+				CBCB8D0B6A6AFD625479F724 /* StrikeProbabilityGauge.swift in Sources */,
+				645B33A119B82F78DB421706 /* TrajectoryPoint.swift in Sources */,
+				F79214CD8E00A90D50B15E07 /* Types.swift in Sources */,
+				9427068A81527D9991F286BD /* Typography.swift in Sources */,
+				AFE85DD741B78A61D973D710 /* UserSettings.swift in Sources */,
+				CV001000001 /* ColorMaskGenerator.swift in Sources */,
+				CV001000002 /* ContourDetector.swift in Sources */,
+				CV001000003 /* BallDetector.swift in Sources */,
+				CV001000004 /* KalmanFilter.swift in Sources */,
+				CV001000005 /* TrajectoryTracker.swift in Sources */,
+				CV001000006 /* RevRateCalculator.swift in Sources */,
+				CV001000007 /* CVErrors.swift in Sources */,
+				PH001000001 /* SpeedCalculator.swift in Sources */,
+				PH001000002 /* AngleCalculator.swift in Sources */,
+				PH001000003 /* StrikeProbability.swift in Sources */,
+				CA001000001 /* FrameProcessor.swift in Sources */,
+				ST001000001 /* RecordingStore.swift in Sources */,
+				4632389610A441FFB96572F9 /* LaneDetector.swift in Sources */,
+				E34F94CB96ED6AE2BE3153E9 /* LaneDetectionResult.swift in Sources */,
+				BD807EB28AF6DF1819CAE020 /* LaneOverlayView.swift in Sources */,
+				CZ001000001 /* CropZoneEditor.swift in Sources */,
+				D69B12B907C39BFCEC7230A2 /* OilPattern.swift in Sources */,
+				8BA801D1F9F94BC6180CE82D /* OilPatternEntity.swift in Sources */,
+				669AC26D38D59DBFE88DBC04 /* OilPatternService.swift in Sources */,
+				60ED5FD00543BC51B17AFD64 /* SessionLaneVisualizer.swift in Sources */,
+				A69D388C1987BD6B9B5E0D16 /* ShotComparisonView.swift in Sources */,
+				4F2A8824BB98D44091AF843B /* LaneCanvas.swift in Sources */,
+				BBC60FE36294BAF7B5C036F0 /* LaneVisualizer.swift in Sources */,
+				312AE09743F59674D46977F8 /* TrajectoryPathView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2717945127D51C7E33767E9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BowlerTrax/BowlerTrax.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = FP2S8W96Q9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BowlerTrax/Info.plist;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_CFBundleDisplayName = BowlerTrax;
+				INFOPLIST_KEY_NSCameraUsageDescription = "BowlerTrax needs camera access to track your bowling shots and provide real-time analytics.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "BowlerTrax needs photo library access to save and export your session videos.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bowlertrax.app;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2F5E0B602D8D693615DE590E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		388521FDB65B203238173408 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BowlerTrax/BowlerTrax.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = FP2S8W96Q9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BowlerTrax/Info.plist;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_CFBundleDisplayName = BowlerTrax;
+				INFOPLIST_KEY_NSCameraUsageDescription = "BowlerTrax needs camera access to track your bowling shots and provide real-time analytics.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "BowlerTrax needs photo library access to save and export your session videos.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bowlertrax.app;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		46F664CD673DFD37699DC243 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9BC38C0C09BBCBFF0BBEA578 /* Build configuration list for PBXNativeTarget "BowlerTrax" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2717945127D51C7E33767E9A /* Debug */,
+				388521FDB65B203238173408 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A88282D80212B1E072D76CF9 /* Build configuration list for PBXProject "BowlerTrax" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46F664CD673DFD37699DC243 /* Debug */,
+				2F5E0B602D8D693615DE590E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ADD2506B5C489CE11D105D89 /* Project object */;
+}

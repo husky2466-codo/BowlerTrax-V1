@@ -1,0 +1,248 @@
+{
+  "patterns": [
+    {
+      "id": "pba-wolf",
+      "name": "Wolf",
+      "category": "PBA Animal",
+      "lengthFeet": 32,
+      "volumeML": 21.5,
+      "ratio": 3.0,
+      "difficulty": "Short",
+      "description": "The shortest PBA Animal pattern. Requires extreme precision and strong ball control. Named for its aggressive, predatory nature that punishes errant shots.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-cheetah",
+      "name": "Cheetah",
+      "category": "PBA Animal",
+      "lengthFeet": 33,
+      "volumeML": 22.0,
+      "ratio": 4.0,
+      "difficulty": "Short",
+      "description": "A short, fast-playing pattern that demands accuracy. Like its namesake, this pattern is quick and unforgiving.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-viper",
+      "name": "Viper",
+      "category": "PBA Animal",
+      "lengthFeet": 36,
+      "volumeML": 23.5,
+      "ratio": 4.5,
+      "difficulty": "Short",
+      "description": "A venomous short pattern with tricky oil distribution. Strikes back at bowlers who miss their marks.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-chameleon",
+      "name": "Chameleon",
+      "category": "PBA Animal",
+      "lengthFeet": 39,
+      "volumeML": 24.0,
+      "ratio": 5.0,
+      "difficulty": "Medium",
+      "description": "A medium-length pattern that changes character as it breaks down. Requires adaptation throughout competition.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-bear",
+      "name": "Bear",
+      "category": "PBA Animal",
+      "lengthFeet": 41,
+      "volumeML": 25.0,
+      "ratio": 5.5,
+      "difficulty": "Medium",
+      "description": "A powerful medium pattern that rewards strength and rev rate. The heavier oil volume demands aggressive equipment.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-scorpion",
+      "name": "Scorpion",
+      "category": "PBA Animal",
+      "lengthFeet": 42,
+      "volumeML": 26.0,
+      "ratio": 6.0,
+      "difficulty": "Medium",
+      "description": "A stinging medium-length pattern with a flat oil distribution. Known for its ability to humble even the best bowlers.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-dragon",
+      "name": "Dragon",
+      "category": "PBA Animal",
+      "lengthFeet": 45,
+      "volumeML": 27.5,
+      "ratio": 7.0,
+      "difficulty": "Long",
+      "description": "A long, intimidating pattern that breathes fire on misses. Requires power and precision to conquer.",
+      "isPreset": true
+    },
+    {
+      "id": "pba-shark",
+      "name": "Shark",
+      "category": "PBA Animal",
+      "lengthFeet": 48,
+      "volumeML": 29.0,
+      "ratio": 8.0,
+      "difficulty": "Long",
+      "description": "The longest PBA Animal pattern. A predator that lurks in deep oil, demanding the most from bowlers' arsenals.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-del-ballard-jr",
+      "name": "Del Ballard Jr",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 34,
+      "volumeML": 22.5,
+      "ratio": 4.0,
+      "difficulty": "Short",
+      "description": "Hall of Fame pattern honoring Del Ballard Jr. A challenging short pattern requiring touch and accuracy.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-johnny-petraglia",
+      "name": "Johnny Petraglia",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 37,
+      "volumeML": 23.5,
+      "ratio": 4.5,
+      "difficulty": "Medium",
+      "description": "Hall of Fame pattern honoring Johnny Petraglia. A transitional length that challenges shot-making.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-mike-aulby",
+      "name": "Mike Aulby",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 38,
+      "volumeML": 24.0,
+      "ratio": 5.0,
+      "difficulty": "Medium",
+      "description": "Hall of Fame pattern honoring Mike Aulby. Rewards the versatility that made Aulby a legend.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-don-carter",
+      "name": "Don Carter",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 39,
+      "volumeML": 24.5,
+      "ratio": 5.0,
+      "difficulty": "Medium",
+      "description": "Hall of Fame pattern honoring Don Carter, the first PBA star. A classic medium pattern.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-don-johnson",
+      "name": "Don Johnson",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 40,
+      "volumeML": 25.0,
+      "ratio": 5.5,
+      "difficulty": "Medium",
+      "description": "Hall of Fame pattern honoring Don Johnson. A balanced medium-length challenge.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-marshall-holman",
+      "name": "Marshall Holman",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 41,
+      "volumeML": 25.5,
+      "ratio": 5.5,
+      "difficulty": "Medium",
+      "description": "Hall of Fame pattern honoring Marshall Holman. Tests the intensity that defined Holman's career.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-mark-roth",
+      "name": "Mark Roth",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 42,
+      "volumeML": 26.0,
+      "ratio": 6.0,
+      "difficulty": "Medium",
+      "description": "Hall of Fame pattern honoring Mark Roth. Rewards the power game that Roth pioneered.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-earl-anthony",
+      "name": "Earl Anthony",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 43,
+      "volumeML": 26.5,
+      "ratio": 6.5,
+      "difficulty": "Long",
+      "description": "Hall of Fame pattern honoring Earl Anthony. Demands the smooth, consistent style of the greatest lefty.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-carmen-salvino",
+      "name": "Carmen Salvino",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 44,
+      "volumeML": 27.0,
+      "ratio": 7.0,
+      "difficulty": "Long",
+      "description": "Hall of Fame pattern honoring Carmen Salvino. A long pattern requiring the showmanship Salvino brought to bowling.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-billy-hardwick",
+      "name": "Billy Hardwick",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 44,
+      "volumeML": 27.0,
+      "ratio": 7.0,
+      "difficulty": "Long",
+      "description": "Hall of Fame pattern honoring Billy Hardwick. Tests the complete game that made Hardwick a champion.",
+      "isPreset": true
+    },
+    {
+      "id": "hof-dick-weber",
+      "name": "Dick Weber",
+      "category": "PBA Hall of Fame",
+      "lengthFeet": 45,
+      "volumeML": 27.5,
+      "ratio": 7.5,
+      "difficulty": "Long",
+      "description": "Hall of Fame pattern honoring Dick Weber. A long, demanding pattern befitting the sport's ambassador.",
+      "isPreset": true
+    },
+    {
+      "id": "house-typical",
+      "name": "Typical House Shot",
+      "category": "House Shot",
+      "lengthFeet": 40,
+      "volumeML": 20.0,
+      "ratio": 10.0,
+      "difficulty": "Medium",
+      "description": "Standard recreational center pattern with high ratio (10:1). Provides forgiveness and easier scoring conditions for casual bowlers.",
+      "isPreset": true
+    },
+    {
+      "id": "kegel-easy-street",
+      "name": "Kegel Easy Street",
+      "category": "House Shot",
+      "lengthFeet": 38,
+      "volumeML": 21.0,
+      "ratio": 12.0,
+      "difficulty": "Medium",
+      "description": "A high-ratio house pattern designed by Kegel. Very forgiving with strong recovery from outside shots.",
+      "isPreset": true
+    },
+    {
+      "id": "kegel-main-street",
+      "name": "Kegel Main Street",
+      "category": "House Shot",
+      "lengthFeet": 41,
+      "volumeML": 22.0,
+      "ratio": 8.0,
+      "difficulty": "Medium",
+      "description": "A moderate house pattern by Kegel. Slightly more challenging than typical house shots while remaining accessible.",
+      "isPreset": true
+    }
+  ],
+  "lastUpdated": "2025-01-01",
+  "version": "1.0.0"
+}

@@ -1,0 +1,101 @@
+{
+  "mcpServers": {
+    "bowlertrax-tools": {
+      "command": "node",
+      "args": [
+        "/Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/mcp/bowlertrax-tools.js"
+      ],
+      "env": {
+        "PROJECT_ROOT": "/Volumes/DevDrive/Projects/BowlerTrax-V1"
+      }
+    }
+  },
+  "contextInclusion": {
+    "autoInclude": [
+      "CLAUDE.md",
+      "BowlerTrax-Plan.md",
+      "PROGRESS.md"
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild:*)",
+      "Bash(xcrun:*)",
+      "Bash(simctl:*)",
+      "Bash(swift:*)",
+      "Bash(swiftlint:*)",
+      "Bash(swiftformat:*)",
+      "Bash(open:*)",
+      "Bash(instruments:*)",
+      "Bash(ios-deploy:*)",
+      "Bash(xcode-select:*)",
+      "mcp__bowlertrax-tools__*",
+      "Bash(bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/*)",
+      "Bash(chmod:*)",
+      "Bash(afplay:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/pre-edit-swift.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/pre-bash-xcode.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/swift-format.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/build-check.sh",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/post-bash-notify.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/context-loader.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+# This directory stores automatic backups of Swift files before editing
+# Backups are named: filename_YYYYMMDD_HHMMSS.swift.bak
+# Only the last 5 backups per file are kept

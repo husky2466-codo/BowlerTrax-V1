@@ -1,0 +1,67 @@
+{
+  "$comment": "NOTE: These hooks are ALSO defined in settings.json for redundancy. Either location should work.",
+  "description": "BowlerTrax iOS Development Hooks - One-shot iOS development workflow automation",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/pre-edit-swift.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/pre-bash-xcode.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/swift-format.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/build-check.sh",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/post-bash-notify.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Volumes/DevDrive/Projects/BowlerTrax-V1/.claude/scripts/context-loader.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
